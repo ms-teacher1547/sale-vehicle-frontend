@@ -68,6 +68,12 @@ const CatalogPage = () => {
               ⚙️ Gérer le Catalogue
             </button>
           )}
+
+          {user.role === "USER" && (
+              <button className="btn btn-primary mt-3" onClick={() => navigate("/choose-options")}>
+                🚗 Ajouter un element au panier
+              </button>
+          )}
         </div>
       </div>
 

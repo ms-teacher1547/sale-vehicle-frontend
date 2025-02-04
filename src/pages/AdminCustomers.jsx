@@ -95,7 +95,7 @@ const AdminCustomers = () => {
                       ❌ Supprimer
                     </button>
                     {customer.type === "COMPANY" && (
-                      <button className="btn btn-info btn-sm ms-2" onClick={() => navigate(`/${customer.id}/subsidiaries`)}>
+                      <button className="btn btn-info btn-sm ms-2" onClick={() => navigate(`subsidiaries/${customer.id}`)}>
                         🏢 Voir Filiales
                       </button>
                     )}

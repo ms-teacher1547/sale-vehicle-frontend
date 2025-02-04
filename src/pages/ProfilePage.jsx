@@ -118,6 +118,27 @@ const ProfilePage = () => {
           📋 Gérer les Clients
         </button>
       )}
+      {user.role === "ADMIN" && (
+        <button 
+          className="btn btn-info mt-3 ms-2" 
+          onClick={() => navigate("/admin/options")}
+        >
+          ⚙️ Gérer les options
+        </button>
+      )}
+
+     
+
+      {user.role === "USER" && (
+        <button className="btn btn-primary mt-3" onClick={() => navigate("/my-orders")}>
+          📦 Mes Commandes
+        </button>
+      )}
+
+      {user.role === "ADMIN" && (
+        <button className="btn btn-dark mt-3" onClick={() => navigate("/admin/orders")}>📋 Gérer les commandes</button>
+      )}
+
     </div>
   );
 };

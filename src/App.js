@@ -12,6 +12,13 @@ import AdminCustomers from "./pages/AdminCustomers"; // ✅ Importer la page
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Footer from "./components/Footer";
+import AdminOptions from "./pages/AdminOptions"; // ✅ Import du composant
+import ChooseOptions from "./pages/ChooseOptions"; // ✅ Import du composant
+import MyOrders from "./pages/MyOrders"; // ✅ Importation du composant
+import AdminOrders from "./pages/AdminOrders";
+import PaymentPage from "./pages/PaymentPage";
+
+
 
 const App = () => {
   return (
@@ -27,6 +34,11 @@ const App = () => {
         <Route path="/subsidiaries" element={<SubsidiaryManagement />} /> {/* ✅ Ajout de la route */}
         <Route path="/admin/customers" element={<AdminCustomers />} />
         <Route path="/subsidiaries/:companyId" element={<SubsidiaryManagement />} />
+        <Route path="/admin/options" element={<AdminOptions />} /> 
+        <Route path="/choose-options" element={<ChooseOptions />} />
+        <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/payment/:orderId" element={<PaymentPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
