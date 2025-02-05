@@ -1,0 +1,52 @@
+/* Style pour le footer */
+.footer {
+    background: linear-gradient(to right, #007bff, #00bfff); /* Dégradé bleu */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .footer .social-icons a {
+    color: white;
+    margin: 0 10px;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+  }
+  
+  .footer .social-icons a:hover {
+    transform: scale(1.1);
+  }
+  
+  .footer .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @media (max-width: 767px) {
+    .footer .container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .footer .social-icons {
+      margin-top: 10px;
+    }
+  }
+  

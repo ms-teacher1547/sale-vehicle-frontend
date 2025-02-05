@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Modal, Button } from "react-bootstrap"; 
+import { Modal, Button, Spinner } from "react-bootstrap";
+import { FaCar, FaTrash, FaEdit, FaSave, FaArrowLeft } from "react-icons/fa";
+import "../styles/AdminCatalog.css";
 
 const API_URL = "http://localhost:8081/api/catalog/vehicles";
 
@@ -18,16 +20,16 @@ const AdminCatalog = () => {
 
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [vehicleType, setVehicleType] = useState("car"); 
+  const [vehicleType, setVehicleType] = useState("car");
   const [newVehicle, setNewVehicle] = useState({
     name: "",
     price: "",
     stockQuantity: "",
     yearOfManufacture: "",
-    fuelType: "",
+    fuelType: "essence", // Valeur par défaut pour le carburant
     mileage: "",
-    numberOfDoors: "", 
-    hasStorageBox: false, 
+    numberOfDoors: "",
+    hasStorageBox: false,
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -38,6 +40,7 @@ const AdminCatalog = () => {
   }, []);
 
   const fetchVehicles = () => {
+    setLoading(true);
     axios.get(API_URL)
       .then(response => {
         setVehicles(response.data);
@@ -78,11 +81,12 @@ const AdminCatalog = () => {
     };
 
     axios.post(`${API_URL}/${vehicleType}`, vehicleData, {
-      withCredentials: true, // ✅ Envoie les cookies avec la requête
+      withCredentials: true,
     })
     .then(response => {
       setVehicles([...vehicles, response.data]);
       resetForm();
+      alert("✅ Véhicule ajouté avec succès !");
     })
     .catch(error => console.error("❌ Erreur lors de l'ajout :", error));
   };
@@ -93,7 +97,7 @@ const AdminCatalog = () => {
       price: "",
       stockQuantity: "",
       yearOfManufacture: "",
-      fuelType: "",
+      fuelType: "essence", // Réinitialisation de la valeur carburant à "essence"
       mileage: "",
       numberOfDoors: "",
       hasStorageBox: false,
@@ -109,25 +113,26 @@ const AdminCatalog = () => {
     if (!vehicleToDelete) return;
 
     axios.delete(`${API_URL}/${vehicleToDelete.id}`, {
-      withCredentials: true, // ✅ Envoie les cookies avec la requête
+      withCredentials: true,
     })
     .then(() => {
       setVehicles(vehicles.filter(vehicle => vehicle.id !== vehicleToDelete.id));
       setShowModal(false);
+      alert("✅ Véhicule supprimé avec succès !");
     })
     .catch(error => console.error("❌ Erreur lors de la suppression :", error));
   };
 
-  if (loading) return <p>Chargement des véhicules...</p>;
+  if (loading) return <Spinner animation="border" role="status" />;
 
   return (
-    <div className="container mt-5">
-      <h2>Gestion des Véhicules 🚗</h2>
+    <div className="admin-container">
+      <h2 className="mb-4 text-center">Gestion des Véhicules <FaCar /></h2>
 
       {/* ✅ Boutons de navigation et réduction */}
       <div className="d-flex justify-content-between mb-3">
-        <button className="btn btn-secondary" onClick={() => navigate("/catalog")}>
-          🔙 Retour au Catalogue
+        <button className="btn btn-outline-primary" onClick={() => navigate("/catalog")}>
+          <FaArrowLeft /> Retour au Catalogue
         </button>
         <button className="btn btn-warning" onClick={applyDiscount}>
           💰 Appliquer une réduction (-20%)
@@ -145,7 +150,22 @@ const AdminCatalog = () => {
         <input type="number" name="price" placeholder="Prix (FCFA)" value={newVehicle.price} onChange={handleInputChange} className="form-control mb-2" />
         <input type="number" name="stockQuantity" placeholder="Quantité en stock" value={newVehicle.stockQuantity} onChange={handleInputChange} className="form-control mb-2" />
         <input type="number" name="yearOfManufacture" placeholder="Année" value={newVehicle.yearOfManufacture} onChange={handleInputChange} className="form-control mb-2" />
-        <input type="text" name="fuelType" placeholder="Carburant (Essence/Diesel)" value={newVehicle.fuelType} onChange={handleInputChange} className="form-control mb-2" />
+        
+        {/* Choix du carburant */}
+        <select 
+          name="fuelType" 
+          value={newVehicle.fuelType} 
+          onChange={handleInputChange} 
+          className="form-control mb-2">
+          <option value="essence">Essence</option>
+          <option value="electric">Électrique</option>
+
+          <option value="diesel">Diesel</option>
+        </select>
+
+        {/* <input type="text" name="fuelType" placeholder="Carburant (Essence/Diesel)/ electric" value={newVehicle.fuelType} onChange={handleInputChange} className="form-control mb-2" />
+        */}
+        
         <input type="number" name="mileage" placeholder="Kilométrage" value={newVehicle.mileage} onChange={handleInputChange} className="form-control mb-2" />
         
         {vehicleType === "car" && (
@@ -159,7 +179,7 @@ const AdminCatalog = () => {
           </div>
         )}
 
-        <button className="btn btn-success mt-2" onClick={addVehicle}>Ajouter</button>
+        <button className="btn btn-success mt-2" onClick={addVehicle}><FaSave /> Ajouter</button>
       </div>
 
       {/* ✅ Liste des véhicules */}
@@ -172,7 +192,7 @@ const AdminCatalog = () => {
             <th>Année</th>
             <th>Carburant</th>
             <th>Kilométrage</th>
-            <th>Quantite</th>
+            <th>Quantité</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -182,11 +202,11 @@ const AdminCatalog = () => {
               <td>{vehicle.name}</td>
               <td>{vehicle.price} FCFA</td>
               <td>{vehicle.yearOfManufacture}</td>
-              <td>{vehicle.fuelType}</td>
+              <td>{vehicle.fuelType === "essence" ? "Essence" : "Électrique"}</td>
               <td>{vehicle.mileage} km</td>
               <td>{vehicle.stockQuantity}</td>
               <td>
-                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(vehicle)}>❌ Supprimer</button>
+                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(vehicle)}><FaTrash /> Supprimer</button>
               </td>
             </tr>
           ))}
@@ -203,7 +223,7 @@ const AdminCatalog = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>Annuler</Button>
-          <Button variant="danger" onClick={deleteVehicle}>Supprimer</Button>
+          <Button variant="danger" onClick={deleteVehicle}><FaTrash /> Supprimer</Button>
         </Modal.Footer>
       </Modal>
     </div>

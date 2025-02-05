@@ -1,0 +1,106 @@
+/* Assurer que le style n'affecte que la page des clients */
+.admin-customers{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px;
+  }
+  
+  /* Titre */
+  .admin-customers h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 40px;
+  }
+  
+  /* Section de filtrage */
+  .admin-customers .filter-section {
+    margin-bottom: 20px;
+  }
+  
+  /* Style pour les alertes d'erreur */
+  .admin-customers .alert {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  /* Table des clients */
+  .admin-customers .table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  .admin-customers .table th,
+  .admin-customers .table td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .admin-customers .table th {
+    background-color: #f8f9fa;
+  }
+  
+  .admin-customers .table td {
+    background-color: #ffffff;
+  }
+  
+  /* Style des boutons */
+  .admin-customers .btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 5px;
+  }
+  
+  .admin-customers .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .admin-customers .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+  
+  /* Hover sur les boutons */
+  .admin-customers .btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+  }
+  
+  /* Tableaux responsives */
+  @media (max-width: 768px) {
+    .admin-customers .table {
+      font-size: 0.9rem;
+    }
+  
+    .admin-customers .btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  
+  /* Spinner de chargement */
+  .admin-customers .spinner {
+    margin: 50px auto;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  
+  /* Retour au profil */
+  .admin-customers .btn-secondary {
+    background-color: #f8f9fa;
+    border-color: #ddd;
+    color: #6c757d;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: 0.3s ease;
+  }
+  
+  .admin-customers .btn-secondary:hover {
+    background-color: #e2e6ea;
+  }
+  

@@ -1,0 +1,136 @@
+/* 🌄 Dégradé de fond élégant pour la page d'inscription */
+.register-container {
+    background: linear-gradient(135deg, #5a8dee, #82c3ff);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* 🪟 Carte d'inscription avec effet de verre dépoli */
+  .register-card {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
+  /* 🔥 Animation d'apparition de la carte */
+  @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+  }
+  
+  /* 🎨 Titre de la page d'inscription */
+  .register-card h2 {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  /* 🚨 Message d'erreur et de succès */
+  .alert {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .alert-danger {
+    background-color: rgba(255, 77, 77, 0.8);
+    color: white;
+  }
+  
+  .alert-success {
+    background-color: rgba(77, 255, 77, 0.8);
+    color: white;
+  }
+  
+  /* 🔤 Champ de texte avec design moderne */
+  .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    font-size: 14px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .input-field::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .input-field:focus {
+    border-color: white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  
+  /* 🕵️‍♀️ Sélecteur de type de compte */
+  select.input-field {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 30px;
+  }
+  
+  /* 🦸‍♂️ Bouton d'inscription stylisé */
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #004aad, #00aaff);
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 74, 173, 0.3);
+  }
+  
+  .submit-btn:hover {
+    background: linear-gradient(to right, #00337a, #008cff);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 74, 173, 0.5);
+  }
+  
+  .submit-btn:active {
+    transform: scale(1);
+  }
+  

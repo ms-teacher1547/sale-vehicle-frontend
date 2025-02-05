@@ -1,0 +1,101 @@
+:root {
+    --primary: #007bff; /* Bleu principal */
+    --secondary: #0056b3; /* Bleu foncé */
+    --light: #f8f9fa; /* Fond clair */
+    --gradient: linear-gradient(135deg, rgba(0, 123, 255, 0.5), rgba(0, 198, 255, 0.5));
+  }
+  
+  /* Style global */
+
+  
+  /* Conteneur de la page avec image en fond */
+
+
+  .home-container {
+    background: var(--gradient), url("../assets/xl.jpeg") no-repeat center center !important;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    color: white;
+  }
+  
+  
+  /* Ajustement du flou */
+  .home-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    filter: blur(2px); /* Flou léger */
+    z-index: -1;
+  }
+  
+  /* Style de la navbar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.9); /* Fond légèrement transparent */
+    padding: 15px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Ajustement du texte */
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .brand {
+    color: #ffcc00; /* Jaune doré */
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .info-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  /* Boutons */
+  .btn {
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  /* Effets au survol */
+  .btn-primary:hover {
+    background-color: var(--secondary);
+    transform: scale(1.05);
+  }
+  
+  .btn-success:hover {
+    background-color: #28a745;
+    transform: scale(1.05);
+  }
+  
+  .btn-outline-light:hover {
+    background-color: white;
+    color: var(--primary);
+    transform: scale(1.05);
+  }
+  

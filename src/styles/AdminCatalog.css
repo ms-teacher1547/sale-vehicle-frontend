@@ -1,0 +1,146 @@
+/* AdminCatalog.css */
+
+/* Conteneur principal */
+.admin-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Titre principal */
+  .admin-container h2 {
+    font-size: 36px;
+    color: #1a4e88;
+    margin-bottom: 20px;
+  }
+  
+  /* Boutons de navigation et de réduction */
+  .admin-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .admin-buttons button {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-buttons .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .admin-buttons .btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+  }
+  
+  /* Formulaire d'ajout de véhicule */
+  .add-vehicle-form {
+    margin-bottom: 40px;
+  }
+  
+  .add-vehicle-form h4 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #1a4e88;
+  }
+  
+  .add-vehicle-form select,
+  .add-vehicle-form input {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .add-vehicle-form input:focus,
+  .add-vehicle-form select:focus {
+    outline: none;
+    border-color: #1a4e88;
+  }
+  
+  /* Bouton d'ajout de véhicule */
+  .add-vehicle-form button {
+    background-color: #28a745;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-vehicle-form button:hover {
+    background-color: #218838;
+  }
+  
+  /* Tableau des véhicules */
+  .vehicle-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .vehicle-table th,
+  .vehicle-table td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .vehicle-table th {
+    background-color: #1a4e88;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .vehicle-table td {
+    background-color: #f9f9f9;
+  }
+  
+  .vehicle-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .vehicle-table button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+  }
+  
+  /* Fenêtre modale */
+  .modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    background-color: #1a4e88;
+    color: white;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .modal-body {
+    background-color: #f9f9f9;
+  }
+  
+  .modal-footer {
+    background-color: #f9f9f9;
+    border-radius: 0 0 10px 10px;
+  }
+  
+  .modal-footer button {
+    border-radius: 25px;
+    font-weight: bold;
+  }
+  
+  .form-check-label {
+    font-size: 16px;
+  }
+  

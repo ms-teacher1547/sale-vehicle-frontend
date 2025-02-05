@@ -1,0 +1,38 @@
+.hover-effect {
+    transition: 0.3s ease-in-out;
+  }
+  
+  .hover-effect:hover {
+    transform: scale(1.1);
+    color: #ffeb3b !important;
+  }
+  /* Effet au survol des liens de navigation */
+.navbar-nav .nav-link:hover {
+    color: #ffb84d; /* Couleur d'orange clair pour le survol */
+    transition: color 0.3s ease;
+  }
+  
+  /* Effet de survol pour le bouton de déconnexion */
+  .btn-danger:hover {
+    background-color: #ff6347; /* Changement de couleur pour un rouge plus clair */
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Dégradé pour le fond du Navbar */
+  .navbar {
+    background: linear-gradient(to right, #2a5298, #1e3c72); /* Dégradé du bleu clair au bleu foncé */
+  }
+  
+  /* Effet de survol pour les boutons */
+  .hover-effect:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  /* Ajouter un effet au survol des éléments */
+.hover-effect:hover {
+  color: #f8f9fa;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+  

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Importer le contexte d'authentification
+import { useAuth } from "../context/AuthContext";
+import "../styles/CatalogPage.css";
+import Navbar from "../components/Navbar";  // Assurez-vous que la Navbar est importée
 
 const API_URL = "http://localhost:8081/api/catalog/vehicles/search";
 
 const CatalogPage = () => {
-  const { user } = useAuth(); // ✅ Récupérer l'utilisateur connecté
+  const { user } = useAuth();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState(""); // ✅ Recherche par nom
+  const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     priceMin: "",
     priceMax: "",
@@ -17,7 +19,7 @@ const CatalogPage = () => {
     operator: "OR",
   });
 
-  const navigate = useNavigate(); // ✅ Hook pour la navigation
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchVehicles();
@@ -38,7 +40,6 @@ const CatalogPage = () => {
 
   const handleSearch = () => {
     let query = `${API_URL}?name=${search}`;
-
     if (filters.priceMin) query += `&priceMin=${filters.priceMin}`;
     if (filters.priceMax) query += `&priceMax=${filters.priceMax}`;
     if (filters.keywords) query += `&keywords=${filters.keywords}&operator=${filters.operator}`;
@@ -54,98 +55,68 @@ const CatalogPage = () => {
   if (loading) return <p>Chargement des véhicules...</p>;
 
   return (
-    <div className="container mt-5">
-      <div className="d-flex justify-content-between align-items-center">
+    <div className="catalog-container">
+      <Navbar /> {/* Navbar ajoutée en haut de la page */}
+      <div className="header">
         <h2>Catalogue des Véhicules 🚗</h2>
-        <div>
-          <button className="btn btn-info me-2" onClick={() => navigate("/profile")}>
-            👤 Aller au Profil
-          </button>
-
-          {/* ✅ Bouton visible UNIQUEMENT pour l'ADMIN */}
-          {user?.role === "ADMIN" && (
-            <button className="btn btn-warning" onClick={() => navigate("/admin/catalog")}>
-              ⚙️ Gérer le Catalogue
-            </button>
-          )}
-
-          {user.role === "USER" && (
-              <button className="btn btn-primary mt-3" onClick={() => navigate("/choose-options")}>
-                🚗 Ajouter un element au panier
-              </button>
-          )}
-        </div>
       </div>
 
-      {/* ✅ Barre de Recherche et Filtres */}
-      <div className="row mt-4">
-        <div className="col-md-3">
+      <div className="search-filters">
+        <div className="search-bar">
           <input
             type="text"
             placeholder="Rechercher par nom..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="form-control mb-2"
           />
         </div>
-        <div className="col-md-3">
+        <div className="filter-group">
           <input
             type="number"
-            placeholder="Prix min (FCFA)"
+            placeholder="Prix min"
             value={filters.priceMin}
             onChange={(e) => setFilters({ ...filters, priceMin: e.target.value })}
-            className="form-control mb-2"
           />
-        </div>
-        <div className="col-md-3">
           <input
             type="number"
-            placeholder="Prix max (FCFA)"
+            placeholder="Prix max"
             value={filters.priceMax}
             onChange={(e) => setFilters({ ...filters, priceMax: e.target.value })}
-            className="form-control mb-2"
           />
-        </div>
-        <div className="col-md-3">
           <input
             type="text"
             placeholder="Mots-clés"
             value={filters.keywords}
             onChange={(e) => setFilters({ ...filters, keywords: e.target.value })}
-            className="form-control mb-2"
           />
-        </div>
-        <div className="col-md-3">
           <select
-            className="form-control mb-2"
             value={filters.operator}
             onChange={(e) => setFilters({ ...filters, operator: e.target.value })}
           >
             <option value="OR">Mot-clé: Correspondance OR</option>
             <option value="AND">Mot-clé: Correspondance AND</option>
           </select>
-        </div>
-        <div className="col-md-1">
-          <button className="btn btn-primary" onClick={handleSearch}>🔍</button>
+          <button onClick={handleSearch}>🔍</button>
         </div>
       </div>
 
-      {/* ✅ Liste des véhicules */}
-      <div className="row mt-4">
+      <div className="vehicles-list">
         {vehicles.length > 0 ? (
-          vehicles.map((vehicle) => (
-            <div key={vehicle.id} className="col-md-4 mb-4">
-              <div className="card">
-                <div className="card-body">
-                  <h5 className="card-title">{vehicle.name}</h5>
-                  <p className="card-text">Prix : {vehicle.price} FCFA</p>
-                  <Link to={`/vehicle/${vehicle.id}`} className="btn btn-primary">
-                    Voir Détails
-                  </Link>
+          <div className="vehicle-grid">
+            {vehicles.map((vehicle) => (
+              <div key={vehicle.id} className="vehicle-card">
+                <img src={vehicle.image} alt={vehicle.name} className="vehicle-img" />
+                <div className="vehicle-info">
+                  <h3>{vehicle.name}</h3>
+                  <p className="price">{vehicle.price} FCFA</p>
+                  <Link to={`/vehicle/${vehicle.id}`} className="btn-details">Voir Détails</Link>
+                  {user?.role === "USER" && (
+                    <button onClick={() => navigate("/choose-options")} className="btn-add-to-cart">Ajouter au Panier</button>
+                  )}
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
           <p>Aucun véhicule disponible.</p>
         )}

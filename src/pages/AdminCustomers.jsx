@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import "../styles/AdminCustomers.css"; // Assurez-vous d'importer le CSS
 
 const API_URL = "http://localhost:8081/api/customers/";
 
@@ -47,16 +48,16 @@ const AdminCustomers = () => {
     }
   };
 
-  if (loading) return <p>Chargement des clients...</p>;
+  if (loading) return <div className="spinner">Chargement des clients...</div>;
 
   return (
-    <div className="container mt-5">
+    <div className="admin-customers">
       <h2>Gestion des Clients 👥</h2>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       {/* ✅ Filtrage par type de client */}
-      <div className="mb-3">
+      <div className="filter-section mb-4">
         <label className="form-label">Filtrer par type :</label>
         <select className="form-control" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="ALL">Tous</option>

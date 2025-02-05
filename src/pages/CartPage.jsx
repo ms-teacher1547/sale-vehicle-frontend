@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2"; // 🔥 Importer SweetAlert pour de meilleurs messages
-
+import Swal from "sweetalert2";
+import "../styles/CartPage.css";
+import Navbar from "../components/Navbar";  // Assurez-vous que la Navbar est importée
 
 const API_URL = "http://localhost:8081/api/cart";
-const ORDER_API_URL = "http://localhost:8081/api/orders"; // ✅ URL de l'API des commandes
+const ORDER_API_URL = "http://localhost:8081/api/orders";
 
 const CartPage = () => {
   const { user } = useAuth();
@@ -15,14 +16,12 @@ const CartPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Fonction pour récupérer le panier du client
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchCart = async () => {
     try {
       const response = await axios.get(`${API_URL}/${user.customer.id}`, { withCredentials: true });
       setCart(response.data);
     } catch (error) {
-      console.error("❌ Erreur lors du chargement du panier :", error);
+      console.error("Erreur lors du chargement du panier :", error);
       setError("Impossible de charger votre panier.");
     }
   };
@@ -33,45 +32,36 @@ const CartPage = () => {
       return;
     }
     fetchCart();
-  }, [user, navigate, fetchCart]); // ✅ Ajout de fetchCart
-  
+  }, [user, navigate]);
 
-  // 🔹 Supprimer un article du panier
   const removeFromCart = async (itemId) => {
     if (!window.confirm("Voulez-vous vraiment supprimer cet article ?")) return;
-
     try {
       await axios.delete(`${API_URL}/${cart.id}/remove/${itemId}`, { withCredentials: true });
-      fetchCart(); // 🔄 Rafraîchir le panier après suppression
+      fetchCart();
     } catch (error) {
-      console.error("❌ Erreur lors de la suppression :", error);
       setError("Impossible de supprimer cet article.");
     }
   };
 
-  // 🔹 Vider le panier
   const clearCart = async () => {
     if (!window.confirm("Voulez-vous vraiment vider votre panier ?")) return;
-
     try {
       await axios.delete(`${API_URL}/clear/${user.customer.id}`, { withCredentials: true });
-      setCart(null); // 🔥 Réinitialiser le panier après suppression
+      setCart(null);
     } catch (error) {
-      console.error("❌ Erreur lors du vidage du panier :", error);
       setError("Impossible de vider votre panier.");
     }
   };
 
-  // 🔹 Passer la commande avec sélection du paiement
-
   const placeOrder = async () => {
     if (!cart || cart.items.length === 0) {
-      setError("⚠️ Votre panier est vide. Ajoutez un véhicule avant de passer la commande.");
+      setError("Votre panier est vide.");
       return;
     }
 
     const confirmResult = await Swal.fire({
-      title: "🛒 Confirmer la commande ?",
+      title: "Confirmer la commande ?",
       text: "Voulez-vous vraiment passer cette commande ?",
       icon: "warning",
       showCancelButton: true,
@@ -79,68 +69,58 @@ const CartPage = () => {
       cancelButtonText: "Annuler",
     });
 
-    if (!confirmResult.isConfirmed) return; // 🚫 Annulation de la commande
+    if (!confirmResult.isConfirmed) return;
 
     setLoading(true);
     try {
-      await axios.post(`${ORDER_API_URL}/`, {}, { withCredentials: true }); // ✅ Fix ici
-
+      await axios.post(`${ORDER_API_URL}/`, {}, { withCredentials: true });
       await Swal.fire({
-        title: "🎉 Commande passée !",
+        title: "Commande passée !",
         text: "Votre commande a été enregistrée avec succès.",
         icon: "success",
         confirmButtonText: "Voir mes commandes",
       });
-
-      navigate("/my-orders", { state: { message: "✅ Votre commande a été passée avec succès !" } });
+      navigate("/my-orders");
     } catch (error) {
-      console.error("❌ Erreur lors de la commande :", error);
-
-      const errorMessage = error.response?.data;
-      
-      if (typeof errorMessage === "string" && errorMessage.includes("commande en attente de paiement")) {
-        setError("⚠️ Vous avez déjà une commande en attente de paiement. Payez-la avant d'en créer une nouvelle !");
-      } else {
-        setError("❌ Impossible de passer la commande.");
-      }
+      setError("Impossible de passer la commande.");
     } finally {
       setLoading(false);
     }
   };
 
-  
-  
-
-
-  if (!cart) return <p>Votre panier est vide.</p>;
+  if (!cart || cart.items.length === 0) {
+    return (
+      <div className="empty-cart">
+        <h2>Votre panier est vide 😞</h2>
+        <p>Ajoutez des véhicules pour finaliser votre commande.</p>
+        <button className="btn btn-primary" onClick={() => navigate("/vehicles")}>Voir les véhicules</button>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mt-5">
+    <div className="cart-container">
       <h2>🛒 Mon Panier</h2>
-
       {error && <div className="alert alert-danger">{error}</div>}
-
-      <ul className="list-group">
+      <div className="cart-items">
         {cart.items.map((item) => (
-          <li key={item.id} className="list-group-item">
-            <strong>{item.vehicle.name}</strong> - {item.quantity}x - {item.vehicle.price} FCFA
-            <ul>
-              {item.options.map((option) => (
-                <li key={option.id}>{option.name} ({option.price} FCFA)</li>
-              ))}
-            </ul>
-            <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(item.id)}>❌ Supprimer</button>
-          </li>
+          <div key={item.id} className="cart-item">
+            <img src={item.vehicle.image} alt={item.vehicle.name} className="cart-item-image" />
+            <div className="cart-item-details">
+              <h4>{item.vehicle.name}</h4>
+              <p>{item.quantity}x - {item.vehicle.price} FCFA</p>
+              <button className="btn btn-sm btn-danger" onClick={() => removeFromCart(item.id)}>❌ Supprimer</button>
+            </div>
+          </div>
         ))}
-      </ul>
-
-     
-
-      <button className="btn btn-warning mt-3 me-2" onClick={clearCart}>🗑️ Vider le panier</button>
-      <button className="btn btn-secondary mt-3 me-2" onClick={() => navigate("/choose-options")}>🔙 Retour</button>
-      <button className="btn btn-primary mt-3" onClick={placeOrder} disabled={loading}>
-        {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
-      </button>
+      </div>
+      <div className="cart-summary">
+        <h4>Total : {cart.totalPrice} FCFA</h4>
+        <button className="btn btn-warning" onClick={clearCart}>🗑️ Vider le panier</button>
+        <button className="btn btn-primary" onClick={placeOrder} disabled={loading}>
+          {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
+        </button>
+      </div>
     </div>
   );
 };
