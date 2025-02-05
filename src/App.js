@@ -17,7 +17,7 @@ import ChooseOptions from "./pages/ChooseOptions"; // ✅ Import du composant
 import MyOrders from "./pages/MyOrders"; // ✅ Importation du composant
 import AdminOrders from "./pages/AdminOrders";
 import PaymentPage from "./pages/PaymentPage";
-
+import MyInvoices from "./pages/MyInvoices";
 
 
 const App = () => {
@@ -39,6 +39,7 @@ const App = () => {
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/payment/:orderId" element={<PaymentPage />} />
+        <Route path="/my-invoices" element={<MyInvoices />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
