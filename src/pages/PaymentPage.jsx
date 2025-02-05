@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const API_URL = "http://localhost:8081/api/payments";
 
 const PaymentPage = () => {
   const { user } = useAuth();
-  const { orderId } = useParams();
   const navigate = useNavigate();
-  
+  const { orderId } = useParams();
   const [paymentType, setPaymentType] = useState("COMPTANT");
-  const [country, setCountry] = useState("CM"); // 🇨🇲 Cameroun par défaut
-  const [payment, setPayment] = useState(null);
+  const [country, setCountry] = useState("CAMEROUN");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!user || !user.customer) {
@@ -22,54 +22,65 @@ const PaymentPage = () => {
     }
   }, [user, navigate]);
 
-  // 🔹 Effectuer un paiement
-  const makePayment = async () => {
-    if (!window.confirm("Voulez-vous vraiment procéder au paiement ?")) return;
-
-    try {
-      const response = await axios.post(`${API_URL}/`, { paymentType, country }, { withCredentials: true });
-      setPayment(response.data);
-      alert("✅ Paiement effectué avec succès !");
-    } catch (error) {
-      console.error("❌ Erreur lors du paiement :", error);
-      setError("Impossible d'effectuer le paiement.");
+  // 🔹 Fonction pour traiter le paiement
+  const handlePayment = async () => {
+    if (!paymentType || !country) {
+      setError("Veuillez sélectionner un type de paiement et un pays.");
+      return;
     }
-  };
 
-  // 🔹 Confirmer un paiement
-  const confirmPayment = async () => {
-    if (!window.confirm("Confirmer définitivement ce paiement ?")) return;
+    const confirmResult = await Swal.fire({
+      title: "💳 Confirmer le paiement ?",
+      text: `Type : ${paymentType} | Pays : ${country}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Oui, payer !",
+      cancelButtonText: "Annuler le paiement",
+    });
 
-    try {
-      await axios.put(`${API_URL}/confirm`, {}, { withCredentials: true });
-      alert("✅ Paiement confirmé avec succès !");
-      navigate("/my-orders"); // 🔄 Redirection vers les commandes
-    } catch (error) {
-      console.error("❌ Erreur lors de la confirmation :", error);
-      setError("Impossible de confirmer le paiement.");
-    }
-  };
+    setLoading(true);
 
-  // 🔹 Télécharger la facture
-  const downloadInvoice = async () => {
-    if (!payment) return;
+    if (confirmResult.isConfirmed) {
+      // 🔥 L'utilisateur a confirmé => Appel de l'API pour effectuer le paiement
+      try {
+        await axios.post(`${API_URL}/`, { paymentType, country }, { withCredentials: true });
 
-    try {
-      const response = await axios.get(`${API_URL}/invoice/${payment.invoiceFilename}`, {
-        responseType: "blob",
-        withCredentials: true
-      });
+        // 🔥 Après création du paiement, confirmation automatique
+        await axios.put(`${API_URL}/confirm`, {}, { withCredentials: true });
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", payment.invoiceFilename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("❌ Erreur lors du téléchargement :", error);
-      setError("Impossible de télécharger la facture.");
+        await Swal.fire({
+          title: "✅ Paiement confirmé !",
+          text: "Votre paiement a été validé et votre facture générée.",
+          icon: "success",
+          confirmButtonText: "Voir mes factures",
+        });
+
+        navigate("/my-invoices");
+      } catch (error) {
+        console.error("❌ Erreur lors du paiement :", error);
+        setError("Impossible d'effectuer le paiement.");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // 🔥 L'utilisateur a annulé => Rejet du paiement
+      try {
+        await axios.put(`${API_URL}/reject`, {}, { withCredentials: true });
+
+        await Swal.fire({
+          title: "🚫 Paiement annulé",
+          text: "Votre paiement a été annulé.",
+          icon: "info",
+          confirmButtonText: "OK",
+        });
+
+        navigate("/my-orders");
+      } catch (error) {
+        console.error("❌ Erreur lors du rejet du paiement :", error);
+        setError("Impossible d'annuler le paiement.");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -79,47 +90,22 @@ const PaymentPage = () => {
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* Sélection du mode de paiement */}
-      <div className="mb-4">
-        <h4>Mode de paiement</h4>
-        <select 
-          className="form-control"
-          value={paymentType}
-          onChange={(e) => setPaymentType(e.target.value)}
-        >
-          <option value="COMPTANT">Paiement Comptant</option>
-          <option value="CREDIT">Paiement Crédit</option>
+      <div className="mb-3">
+        <label>Type de Paiement :</label>
+        <select className="form-control" value={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
+          <option value="COMPTANT">Comptant</option>
+          <option value="CREDIT">Crédit</option>
         </select>
       </div>
 
-      {/* Sélection du pays */}
-      <div className="mb-4">
-        <h4>Pays</h4>
-        <select 
-          className="form-control"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        >
-          <option value="CM">🇨🇲 Cameroun</option>
-          <option value="FR">🇫🇷 France</option>
-          <option value="US">🇺🇸 États-Unis</option>
-        </select>
+      <div className="mb-3">
+        <label>Pays :</label>
+        <input type="text" className="form-control" value={country} onChange={(e) => setCountry(e.target.value)} />
       </div>
 
-      {/* Bouton pour effectuer le paiement */}
-      <button className="btn btn-success" onClick={makePayment}>💰 Effectuer le paiement</button>
-
-      {/* Bouton de confirmation de paiement (visible après paiement) */}
-      {payment && (
-        <>
-          <hr />
-          <button className="btn btn-primary mt-3" onClick={confirmPayment}>✅ Confirmer le paiement</button>
-          <button className="btn btn-secondary mt-3 ms-2" onClick={downloadInvoice}>⬇️ Télécharger la facture</button>
-        </>
-      )}
-
-      {/* 🔙 Bouton retour */}
-      <button className="btn btn-warning mt-4" onClick={() => navigate("/my-orders")}>🔙 Retour</button>
+      <button className="btn btn-primary" onClick={handlePayment} disabled={loading}>
+        {loading ? "⌛ Traitement..." : "💳 Payer"}
+      </button>
     </div>
   );
 };
