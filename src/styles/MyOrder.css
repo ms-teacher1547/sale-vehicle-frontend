@@ -1,0 +1,167 @@
+/* Conteneur spécifique à la page MyOrders */
+.myorders-container {
+    background-color: #ffffff; /* Fond clair pour toute la page */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce pour la carte */
+    max-width: 1200px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Titre de la page MyOrders */
+  .myorders-container h2 {
+    font-size: 2rem;
+    color: #333333;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  /* Alertes d'erreur sur MyOrders */
+  .myorders-container .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Liste des commandes sur MyOrders */
+  .myorders-container .list-group {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .myorders-container .list-group-item {
+    background-color: #f9f9f9;
+    color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Ombre légère */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .myorders-container .list-group-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre plus marquée au survol */
+  }
+  
+  /* Badge de statut sur MyOrders */
+  .myorders-container .badge {
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  .myorders-container .bg-warning {
+    background-color: #ffcc00; /* Jaune pour "EN_COURS" */
+    color: #333;
+  }
+  
+  .myorders-container .bg-success {
+    background-color: #28a745; /* Vert pour "VALIDEE" */
+    color: white;
+  }
+  
+  /* Détails des véhicules dans la commande */
+  .myorders-container ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .myorders-container strong {
+    font-weight: bold;
+  }
+  
+  /* Boutons d'action sur MyOrders */
+  .myorders-container .btn {
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 24px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .myorders-container .btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Bouton pour confirmer la commande */
+  .myorders-container .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .myorders-container .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Bouton pour voir les documents */
+  .myorders-container .btn-info {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+  }
+  
+  .myorders-container .btn-info:hover {
+    background-color: #138496;
+  }
+  
+  /* Bouton pour télécharger le document */
+  .myorders-container .btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+  }
+  
+  .myorders-container .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  /* Bouton pour passer au paiement */
+  .myorders-container .btn-primary.btn-sm {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .myorders-container .btn-primary.btn-sm:hover {
+    background-color: #e0a800;
+  }
+  
+  /* Liste des documents pour une commande */
+  .myorders-container ul.mt-3 {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .myorders-container ul.mt-3 li {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  
+  .myorders-container ul.mt-3 li button {
+    margin-left: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  
+  .myorders-container ul.mt-3 p {
+    font-style: italic;
+    color: #777;
+    font-size: 1rem;
+  }
+  
+  /* Commandes vides */
+  .myorders-container ul li {
+    font-size: 1rem;
+    color: #777;
+  }
+  

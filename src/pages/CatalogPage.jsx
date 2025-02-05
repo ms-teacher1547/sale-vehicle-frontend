@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import "../styles/CatalogPage.css";
-import Navbar from "../components/Navbar";  // Assurez-vous que la Navbar est importée
+import Navbar from "../components/Navbar"; 
+import { FaTh, FaListUl } from "react-icons/fa"; 
 
 const API_URL = "http://localhost:8081/api/catalog/vehicles/search";
 
@@ -18,7 +19,7 @@ const CatalogPage = () => {
     keywords: "",
     operator: "OR",
   });
-
+  const [viewMode, setViewMode] = useState("grid");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const CatalogPage = () => {
 
   return (
     <div className="catalog-container">
-      <Navbar /> {/* Navbar ajoutée en haut de la page */}
+      <Navbar />
       <div className="header">
         <h2>Catalogue des Véhicules 🚗</h2>
       </div>
@@ -100,9 +101,24 @@ const CatalogPage = () => {
         </div>
       </div>
 
+      <div className="view-mode">
+        <button
+          className={`view-button ${viewMode === "grid" ? "active" : ""}`}
+          onClick={() => setViewMode("grid")}
+        >
+          <FaTh /> Grid
+        </button>
+        <button
+          className={`view-button ${viewMode === "list" ? "active" : ""}`}
+          onClick={() => setViewMode("list")}
+        >
+          <FaListUl /> Liste
+        </button>
+      </div>
+
       <div className="vehicles-list">
         {vehicles.length > 0 ? (
-          <div className="vehicle-grid">
+          <div className={viewMode === "grid" ? "vehicle-grid" : "vehicle-list"}>
             {vehicles.map((vehicle) => (
               <div key={vehicle.id} className="vehicle-card">
                 <img src={vehicle.image} alt={vehicle.name} className="vehicle-img" />
@@ -111,7 +127,7 @@ const CatalogPage = () => {
                   <p className="price">{vehicle.price} FCFA</p>
                   <Link to={`/vehicle/${vehicle.id}`} className="btn-details">Voir Détails</Link>
                   {user?.role === "USER" && (
-                    <button onClick={() => navigate("/choose-options")} className="btn-add-to-cart">Ajouter au Panier</button>
+                    <button onClick={() => navigate(`/choose-options/${vehicle.id}`)} className="btn-add-to-cart">Ajouter les options</button>
                   )}
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import "../styles/MyOrder.css";
 
 const API_URL = "http://localhost:8081/api/orders";
 
@@ -84,11 +85,11 @@ const MyOrders = () => {
 
 
   return (
-    <div className="container mt-5">
+    <div className="myorders-container mt-5">
       <h2>📦 Mes Commandes</h2>
-
+  
       {error && <div className="alert alert-danger">{error}</div>}
-
+  
       {orders.length === 0 ? (
         <p>Aucune commande enregistrée.</p>
       ) : (
@@ -99,7 +100,7 @@ const MyOrders = () => {
               <span className={`badge ${order.status === "EN_COURS" ? "bg-warning" : "bg-success"}`}>
                 {order.status}
               </span>
-
+  
               <ul>
                 {order.orderVehicles.map((item) => (
                   <li key={item.id}>
@@ -107,9 +108,9 @@ const MyOrders = () => {
                   </li>
                 ))}
               </ul>
-
+  
               <p><strong>Total :</strong> {order.totalPrice} FCFA</p>
-
+  
               {/* ✅ Bouton pour confirmer la commande si elle est "EN_COURS" */}
               {order.status === "EN_COURS" && (
                 <button 
@@ -119,8 +120,7 @@ const MyOrders = () => {
                   ✅ Confirmer la commande
                 </button>
               )}
-
-
+  
               {/* ✅ Afficher les documents pour une commande confirmée */}
               {order.status === "VALIDEE" && (
                 <button 
@@ -130,7 +130,7 @@ const MyOrders = () => {
                   📄 Voir les documents
                 </button>
               )}
-
+  
               {/* ✅ Liste des documents si une commande est sélectionnée */}
               {selectedOrderId === order.id && (
                 <ul className="mt-3">
@@ -151,7 +151,7 @@ const MyOrders = () => {
                   )}
                 </ul>
               )}
-
+  
               {/* ✅ Bouton pour passer au paiement si la commande n'est pas payée */}
               {order.status === "VALIDEE" && (
                 <button 
@@ -161,13 +161,14 @@ const MyOrders = () => {
                   💳 Passer au paiement
                 </button>
               )}
-
+  
             </li>
           ))}
         </ul>
       )}
     </div>
   );
+  
 };
 
 export default MyOrders;

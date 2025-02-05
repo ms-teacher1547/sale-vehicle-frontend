@@ -1,0 +1,81 @@
+/* Conteneur spécifique à la page MyInvoices */
+.myinvoices-container {
+    background-color: #ffffff; /* Fond clair */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    max-width: 1200px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Titre de la page MyInvoices */
+  .myinvoices-container h2 {
+    font-size: 2rem;
+    color: #333333;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  /* Alertes d'erreur sur MyInvoices */
+  .myinvoices-container .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  
+  /* Liste des factures */
+  .myinvoices-container .list-group {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .myinvoices-container .list-group-item {
+    background-color: #f9f9f9;
+    color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .myinvoices-container .list-group-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre plus marquée */
+  }
+  
+  /* Boutons d'action sur MyInvoices */
+  .myinvoices-container .btn {
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 24px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .myinvoices-container .btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Bouton pour télécharger la facture */
+  .myinvoices-container .btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+  }
+  
+  .myinvoices-container .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  /* Factures vides */
+  .myinvoices-container p {
+    font-size: 1rem;
+    color: #777;
+  }
+  

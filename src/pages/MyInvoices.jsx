@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import "../styles/MyInvoice.css";
 
 const API_URL = "http://localhost:8081/api/payments";
 
@@ -47,7 +48,7 @@ const MyInvoices = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="myinvoices-container mt-5">
       <h2>📜 Mes Factures</h2>
 
       {error && <div className="alert alert-danger">{error}</div>}

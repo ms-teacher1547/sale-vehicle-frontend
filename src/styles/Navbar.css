@@ -35,4 +35,8 @@
   transition: background-color 0.3s ease;
 }
 
-  
+.nav-link.active {
+  font-weight: bold;
+  color: #f8f9fa;  /* Couleur de texte active */
+  border-bottom: 2px solid #f8f9fa;  /* Souligner le lien actif */
+}

@@ -3,8 +3,8 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import "../styles/CartPage.css";
-import Navbar from "../components/Navbar";  // Assurez-vous que la Navbar est importée
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/CartPage.css"; // 🔥 Ajoute un fichier CSS personnalisé si besoin
 
 const API_URL = "http://localhost:8081/api/cart";
 const ORDER_API_URL = "http://localhost:8081/api/orders";
@@ -21,7 +21,7 @@ const CartPage = () => {
       const response = await axios.get(`${API_URL}/${user.customer.id}`, { withCredentials: true });
       setCart(response.data);
     } catch (error) {
-      console.error("Erreur lors du chargement du panier :", error);
+      console.error("❌ Erreur lors du chargement du panier :", error);
       setError("Impossible de charger votre panier.");
     }
   };
@@ -40,6 +40,7 @@ const CartPage = () => {
       await axios.delete(`${API_URL}/${cart.id}/remove/${itemId}`, { withCredentials: true });
       fetchCart();
     } catch (error) {
+      console.error("❌ Erreur lors de la suppression :", error);
       setError("Impossible de supprimer cet article.");
     }
   };
@@ -50,18 +51,19 @@ const CartPage = () => {
       await axios.delete(`${API_URL}/clear/${user.customer.id}`, { withCredentials: true });
       setCart(null);
     } catch (error) {
+      console.error("❌ Erreur lors du vidage du panier :", error);
       setError("Impossible de vider votre panier.");
     }
   };
 
   const placeOrder = async () => {
     if (!cart || cart.items.length === 0) {
-      setError("Votre panier est vide.");
+      setError("⚠️ Votre panier est vide. Ajoutez un véhicule avant de passer la commande.");
       return;
     }
 
     const confirmResult = await Swal.fire({
-      title: "Confirmer la commande ?",
+      title: "🛒 Confirmer la commande ?",
       text: "Voulez-vous vraiment passer cette commande ?",
       icon: "warning",
       showCancelButton: true,
@@ -74,49 +76,67 @@ const CartPage = () => {
     setLoading(true);
     try {
       await axios.post(`${ORDER_API_URL}/`, {}, { withCredentials: true });
+
       await Swal.fire({
-        title: "Commande passée !",
+        title: "🎉 Commande passée !",
         text: "Votre commande a été enregistrée avec succès.",
         icon: "success",
         confirmButtonText: "Voir mes commandes",
       });
-      navigate("/my-orders");
+
+      navigate("/my-orders", { state: { message: "✅ Votre commande a été passée avec succès !" } });
     } catch (error) {
-      setError("Impossible de passer la commande.");
+      console.error("❌ Erreur lors de la commande :", error);
+
+      const errorMessage = error.response?.data;
+      if (typeof errorMessage === "string" && errorMessage.includes("commande en attente de paiement")) {
+        setError("⚠️ Vous avez déjà une commande en attente de paiement. Payez-la avant d'en créer une nouvelle !");
+      } else {
+        setError("❌ Impossible de passer la commande.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  if (!cart || cart.items.length === 0) {
-    return (
-      <div className="empty-cart">
-        <h2>Votre panier est vide 😞</h2>
-        <p>Ajoutez des véhicules pour finaliser votre commande.</p>
-        <button className="btn btn-primary" onClick={() => navigate("/vehicles")}>Voir les véhicules</button>
+  if (!cart) return (
+    <div className="container mt-5 cart-container">
+      <div className="empty-cart-message text-center mt-5">
+        <h3 className="text-danger">Votre panier est vide</h3>
+        <p className="text-muted">Ajoutez des articles à votre panier pour commencer.</p>
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="cart-container">
-      <h2>🛒 Mon Panier</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <div className="cart-items">
+    <div className="container mt-5 cart-container">
+      <h2 className="text-primary text-center">🛒 Mon Panier</h2>
+
+      {error && <div className="alert alert-danger text-center">{error}</div>}
+
+      <ul className="list-group mt-4">
         {cart.items.map((item) => (
-          <div key={item.id} className="cart-item">
-            <img src={item.vehicle.image} alt={item.vehicle.name} className="cart-item-image" />
-            <div className="cart-item-details">
-              <h4>{item.vehicle.name}</h4>
-              <p>{item.quantity}x - {item.vehicle.price} FCFA</p>
-              <button className="btn btn-sm btn-danger" onClick={() => removeFromCart(item.id)}>❌ Supprimer</button>
+          <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{item.vehicle.name}</strong> - {item.quantity}x - {item.vehicle.price} FCFA
+              <ul className="list-unstyled mt-2">
+                {item.options.map((option) => (
+                  <li key={option.id} className="text-secondary">
+                    {option.name} ({option.price} FCFA)
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+            <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(item.id)}>
+              ❌
+            </button>
+          </li>
         ))}
-      </div>
-      <div className="cart-summary">
-        <h4>Total : {cart.totalPrice} FCFA</h4>
-        <button className="btn btn-warning" onClick={clearCart}>🗑️ Vider le panier</button>
+      </ul>
+
+      <div className="d-flex justify-content-center mt-4">
+        <button className="btn btn-warning me-2" onClick={clearCart}>🗑️ Vider le panier</button>
+        <button className="btn btn-secondary me-2" onClick={() => navigate("/choose-options")}>🔙 Retour</button>
         <button className="btn btn-primary" onClick={placeOrder} disabled={loading}>
           {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
         </button>

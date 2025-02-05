@@ -1,40 +1,79 @@
+/* Container principal de la page du panier */
 .cart-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 120px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .cart-items {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .cart-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .cart-item-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .cart-summary {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .empty-cart {
-    text-align: center;
-    padding: 50px;
-  }
-  
+  background: linear-gradient(135deg, #c9d8f5, #f7fbfc); /* Dégradé léger pour l'arrière-plan */
+  color: black; /* Texte noir pour un bon contraste */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour du container */
+}
+
+/* Liste des articles du panier */
+.list-group-item {
+  background: white; /* Fond blanc pour chaque article */
+  color: black; /* Texte noir */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre discrète pour chaque item */
+}
+
+/* Style des boutons */
+.btn {
+  border-radius: 25px; /* Coins arrondis */
+  font-weight: bold; /* Texte en gras */
+  padding: 10px 20px; /* Espacement interne */
+  font-size: 1rem;
+  transition: background-color 0.3s ease; /* Transition douce pour le changement de couleur */
+}
+
+.btn:hover {
+  opacity: 0.8; /* Légère transparence au survol */
+}
+
+/* Bouton de suppression */
+.btn-danger {
+  background-color: #d9534f; /* Rouge vif */
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c9302c; /* Rouge plus foncé au survol */
+}
+
+/* Bouton pour vider le panier */
+.btn-warning {
+  background-color: #f0ad4e; /* Orange pour attirer l'attention */
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #ec971f; /* Orange plus foncé au survol */
+}
+
+/* Bouton pour passer la commande */
+.btn-primary {
+  background-color: #5bc0de; /* Bleu clair */
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #31b0d5; /* Bleu plus foncé au survol */
+}
+/* Conteneur du message de panier vide */
+.empty-cart-message {
+  background-color: #f8f9fa;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Texte pour le panier vide */
+.empty-cart-message h3 {
+  font-size: 1.5rem;
+  color: #dc3545;
+}
+
+.empty-cart-message p {
+  font-size: 1.1rem;
+  color: #6c757d;
+}

@@ -1,0 +1,135 @@
+/* Style spécifique à la page AdminOptions */
+.admin-options-container {
+    margin-top: 40px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Titre principal */
+  .admin-options-container h2 {
+    font-size: 2rem;
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  
+  /* Alertes d'erreur ou de succès */
+  .admin-options-container .alert {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  /* Alertes d'erreur */
+  .admin-options-container .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* Formulaires */
+  .admin-options-container h4 {
+    font-size: 1.25rem;
+    color: #343a40;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  .admin-options-container input, 
+  .admin-options-container select {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+  }
+  
+  .admin-options-container input:focus, 
+  .admin-options-container select:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .admin-options-container button {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 12px 20px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .admin-options-container button:hover {
+    background-color: #0069d9;
+    transform: translateY(-2px);
+  }
+  
+  .admin-options-container .btn-success {
+    background-color: #28a745;
+    border: none;
+  }
+  
+  .admin-options-container .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+  
+  .admin-options-container .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+  }
+  
+  /* Tables */
+  .admin-options-container table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .admin-options-container table th, 
+  .admin-options-container table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    color: #343a40;
+  }
+  
+  .admin-options-container table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+  }
+  
+  .admin-options-container table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .admin-options-container table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Liste des incompatibilités */
+  .admin-options-container ul {
+    padding-left: 20px;
+    list-style: none;
+  }
+  
+  .admin-options-container ul li {
+    background-color: #f8d7da;
+    color: #721c24;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .admin-options-container ul li:hover {
+    background-color: #f5c6cb;
+  }
+  
+  .admin-options-container ul li::before {
+    content: "🚫 ";
+    font-size: 20px;
+  }
+  
