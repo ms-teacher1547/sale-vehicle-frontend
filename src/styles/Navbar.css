@@ -1,42 +1,67 @@
+/* Dégradé pour le fond du Navbar */
+.navbar {
+  background: linear-gradient(to right, #2a5298, #1e3c72); /* Dégradé du bleu clair au bleu foncé */
+}
+
+/* Effet de survol des liens de navigation */
 .hover-effect {
-    transition: 0.3s ease-in-out;
-  }
-  
-  .hover-effect:hover {
-    transform: scale(1.1);
-    color: #ffeb3b !important;
-  }
-  /* Effet au survol des liens de navigation */
+  transition: 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: scale(1.1);
+  color: #ffeb3b !important;
+}
+
+/* Effet au survol des liens de navigation */
 .navbar-nav .nav-link:hover {
-    color: #ffb84d; /* Couleur d'orange clair pour le survol */
-    transition: color 0.3s ease;
-  }
-  
-  /* Effet de survol pour le bouton de déconnexion */
-  .btn-danger:hover {
-    background-color: #ff6347; /* Changement de couleur pour un rouge plus clair */
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Dégradé pour le fond du Navbar */
-  .navbar {
-    background: linear-gradient(to right, #2a5298, #1e3c72); /* Dégradé du bleu clair au bleu foncé */
-  }
-  
-  /* Effet de survol pour les boutons */
-  .hover-effect:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
-  }
-  /* Ajouter un effet au survol des éléments */
+  color: #ffb84d; /* Couleur d'orange clair pour le survol */
+  transition: color 0.3s ease;
+}
+
+/* Effet de survol pour les boutons */
+.hover-effect:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Ajouter un effet au survol des éléments */
 .hover-effect:hover {
   color: #f8f9fa;
   background-color: rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 }
 
+/* Style pour le lien actif */
 .nav-link.active {
   font-weight: bold;
   color: #f8f9fa;  /* Couleur de texte active */
   border-bottom: 2px solid #f8f9fa;  /* Souligner le lien actif */
+}
+
+/* Icônes dans les liens (profil et déconnexion) */
+.navbar-nav .nav-link svg {
+  margin-right: 8px;
+}
+
+/* Icône de profil (sans fond ni bordure, couleur blanche) */
+.navbar-nav .nav-link.profil-btn {
+  color: #fff;
+  border: none;
+  background: none;
+}
+
+.navbar-nav .nav-link.profil-btn:hover {
+  color: #ffb84d;  /* Légère couleur d'orange clair au survol */
+}
+
+/* Icône de déconnexion (sans fond ni bordure, couleur rouge) */
+.navbar-nav .nav-link.deconnexion-btn {
+  color: #dc3545; /* Couleur rouge pour le bouton de déconnexion */
+  border: none;
+  background: none;
+}
+
+.navbar-nav .nav-link.deconnexion-btn:hover {
+  color: #c82333; /* Un rouge plus foncé au survol */
 }

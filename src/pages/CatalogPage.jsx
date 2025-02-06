@@ -127,7 +127,7 @@ const CatalogPage = () => {
                   <p className="price">{vehicle.price} FCFA</p>
                   <Link to={`/vehicle/${vehicle.id}`} className="btn-details">Voir Détails</Link>
                   {user?.role === "USER" && (
-                    <button onClick={() => navigate(`/choose-options/${vehicle.id}`)} className="btn-add-to-cart">Ajouter les options</button>
+                    <button onClick={() => navigate(`/choose-options/`)} className="btn-add-to-cart">Ajouter les options</button>
                   )}
                 </div>
               </div>

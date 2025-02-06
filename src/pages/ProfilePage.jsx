@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { FaSignOutAlt, FaEdit, FaSave, FaTimes, FaCar, FaUsers, FaCog, FaBoxOpen, FaEnvelope, FaMapMarkerAlt, FaUserAlt } from "react-icons/fa";
-import "../styles/ProfilPage.css";
+import '../styles/ProfilPage.css'; // Importation du CSS spécifique à la page
 
 const API_URL = "http://localhost:8081/api/customers/";
 
 const ProfilePage = () => {
   const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
+
   const isAdmin = user?.role === "ADMIN";
   const [customer, setCustomer] = useState(user?.customer || {});
   const [name, setName] = useState(isAdmin ? user?.fullname : customer?.name || "Nom non disponible");
@@ -42,7 +42,8 @@ const ProfilePage = () => {
         setMessageType("success");
         setTimeout(() => setMessage(""), 4000);
       })
-      .catch(() => {
+      .catch(error => {
+        console.error("❌ Erreur mise à jour :", error);
         setMessage("⚠️ Une erreur est survenue lors de la mise à jour.");
         setMessageType("danger");
       });
@@ -50,7 +51,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-      <h2>Profil de {name}</h2>
+      <h2 className="profile-title">Profil de {name}</h2>
 
       {message && (
         <div className={`alert alert-${messageType} mt-3`} role="alert">
@@ -58,57 +59,73 @@ const ProfilePage = () => {
         </div>
       )}
 
-      <div className="profile-card">
-        <div className="profile-header">
-          <FaUserAlt className="profile-icon" />
-          <h3>{name}</h3>
-        </div>
+      <div className="profile-info">
+        <p><strong>Nom :</strong> {name}</p>
         <p><strong>Rôle :</strong> {user?.role}</p>
-        {user?.customer && (
+
+        {user?.customer ? (
           <>
-            <div className="profile-info">
-              <FaEnvelope /> <span>{customer?.email || "Non renseigné"}</span>
-            </div>
-            <div className="profile-info">
-              <FaMapMarkerAlt /> <span>{customer?.address || "Non renseignée"}</span>
-            </div>
-            <div className="profile-info">
-              <strong>Type de client :</strong> {customer?.type}
-            </div>
+            <p><strong>Email :</strong> {customer?.email || "Non renseigné"}</p>
+            <p><strong>Adresse :</strong> {customer?.address || "Non renseignée"}</p>
+            <p><strong>Type de client :</strong> {customer?.type}</p>
 
             {editMode ? (
-              <div className="edit-mode">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="form-control" />
-                <input type="text" value={customer.email || ""} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} className="form-control" />
-                <input type="text" value={customer.address || ""} onChange={(e) => setCustomer({ ...customer, address: e.target.value })} className="form-control" />
-                <div className="action-buttons">
-                  <button className="btn btn-success" onClick={handleUpdateProfile}><FaSave /> Sauvegarder</button>
-                  <button className="btn btn-secondary" onClick={() => setEditMode(false)}><FaTimes /> Annuler</button>
+              <div className="edit-form">
+                <input 
+                  type="text" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                  className="form-control mb-2" 
+                />
+                <input 
+                  type="text" 
+                  value={customer.email || ""} 
+                  onChange={(e) => setCustomer({ ...customer, email: e.target.value })} 
+                  className="form-control mb-2" 
+                />
+                <input 
+                  type="text" 
+                  value={customer.address || ""} 
+                  onChange={(e) => setCustomer({ ...customer, address: e.target.value })} 
+                  className="form-control mb-2" 
+                />
+                <div className="button-group">
+                  <button className="btn-save" onClick={handleUpdateProfile}>💾 Sauvegarder</button>
+                  <button className="btn-cancel" onClick={() => setEditMode(false)}>❌ Annuler</button>
                 </div>
               </div>
             ) : (
-              <button className="btn btn-warning" onClick={() => setEditMode(true)}><FaEdit /> Modifier</button>
+              <div className="button-group">
+                <button className="btn-edit" onClick={() => setEditMode(true)}>✏️ Modifier</button>
+              </div>
+            )}
+
+            {customer?.type === "COMPANY" && (
+              <button className="btn-manage" onClick={() => navigate("/subsidiaries")}>
+                🏢 Gérer les filiales
+              </button>
             )}
           </>
+        ) : (
+          <p>Pas d'informations client (vous êtes un ADMIN).</p>
         )}
-      </div>
 
-      <div className="profile-actions">
-        <button className="btn btn-danger" onClick={handleLogout}>
-          <FaSignOutAlt /> Se déconnecter
-        </button>
-
-        <button className="btn btn-primary" onClick={() => navigate("/catalog")}>
-          <FaCar /> Aller au Catalogue
-        </button>
-
-        {user.role === "ADMIN" && (
-          <>
-            <button className="btn btn-dark" onClick={() => navigate("/admin/customers")}><FaUsers /> Gérer les Clients</button>
-            <button className="btn btn-info" onClick={() => navigate("/admin/options")}><FaCog /> Gérer les options</button>
-            <button className="btn btn-dark" onClick={() => navigate("/admin/orders")}><FaBoxOpen /> Gérer les commandes</button>
-          </>
-        )}
+        <div className="button-group">
+          <button className="btn-logout" onClick={handleLogout}>Se déconnecter</button>
+          <button className="btn-catalog" onClick={() => navigate("/catalog")}>🚗 Aller au Catalogue</button>
+          {user.role === "ADMIN" && (
+            <>
+              <button className="btn-manage-customers" onClick={() => navigate("/admin/customers")}>📋 Gérer les Clients</button>
+              <button className="btn-manage-options" onClick={() => navigate("/admin/options")}>⚙️ Gérer les options</button>
+            </>
+          )}
+          {user.role === "USER" && (
+            <button className="btn-orders" onClick={() => navigate("/my-orders")}>📦 Mes Commandes</button>
+          )}
+          {user.role === "ADMIN" && (
+            <button className="btn-manage-orders" onClick={() => navigate("/admin/orders")}>📋 Gérer les commandes</button>
+          )}
+        </div>
       </div>
     </div>
   );

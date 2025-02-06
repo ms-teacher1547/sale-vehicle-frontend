@@ -1,7 +1,7 @@
 /* Conteneur spécifique à la page MyInvoices */
 .myinvoices-container {
     background-color: #ffffff; /* Fond clair */
-    padding: 30px;
+    padding: 80px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce */
     max-width: 1200px;

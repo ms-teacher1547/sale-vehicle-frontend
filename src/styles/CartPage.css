@@ -2,7 +2,7 @@
 .cart-container {
   background: linear-gradient(135deg, #c9d8f5, #f7fbfc); /* Dégradé léger pour l'arrière-plan */
   color: black; /* Texte noir pour un bon contraste */
-  padding: 20px;
+  padding: 90px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour du container */
 }

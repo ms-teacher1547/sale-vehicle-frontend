@@ -1,0 +1,68 @@
+/* 🎨 Style spécifique à la page des détails du véhicule */
+.vehicle-details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #003366, #00aaff);
+    padding: 20px;
+  }
+  
+  .vehicle-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  /* ✅ Style de l'image */
+  .vehicle-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .vehicle-card h2 {
+    color: #003366;
+    margin-bottom: 15px;
+  }
+  
+  .vehicle-info {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .vehicle-info p {
+    font-size: 16px;
+    margin: 8px 0;
+  }
+  
+  .back-button {
+    background: #003366;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .back-button:hover {
+    background: #0055aa;
+  }
+  
+  .loading,
+  .error,
+  .not-found {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+  }
+  

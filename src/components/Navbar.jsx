@@ -1,12 +1,12 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";  // Importation de useLocation
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { FaHome, FaUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa"; // Icônes utilisées
+import { FaHome, FaUser, FaShoppingCart, FaList, FaSignOutAlt, FaCogs, FaBox } from "react-icons/fa"; // Icônes utilisées
 import "../styles/Navbar.css";
 
 const Navbar = () => {
   const { user } = useAuth();
-  const location = useLocation();  // Utilisation de useLocation pour obtenir la route actuelle
+  const location = useLocation();
 
   // Fonction pour vérifier si le lien est actif
   const isActive = (path) => location.pathname === path ? "active" : "";
@@ -22,24 +22,23 @@ const Navbar = () => {
         {/* Liens principaux de la navigation */}
         <div className="navbar-nav mx-auto">
           <Link className={`nav-link text-white hover-effect ${isActive("/")}`} to="/">
-            <FaHome className="me-2" /> Home
+            <FaHome className="me-2" /> Accueil
           </Link>
 
           {/* Panier visible uniquement pour les utilisateurs */}
           {user?.role === "USER" && (
             <>
               <Link className={`nav-link text-white hover-effect ${isActive("/catalog")}`} to="/catalog">
-                Catalogue
+                <FaList className="me-2" /> Catalogue
               </Link>
               <Link className={`nav-link text-white hover-effect ${isActive("/cart")}`} to="/cart">
                 <FaShoppingCart className="me-2" /> Panier
               </Link>
-             
               <Link className={`nav-link text-white hover-effect ${isActive("/my-orders")}`} to="/my-orders">
-                Mes commandes
+                <FaBox className="me-2" /> Mes commandes
               </Link>
               <Link className={`nav-link text-white hover-effect ${isActive("/my-invoices")}`} to="/my-invoices">
-                Mes factures
+                <FaBox className="me-2" /> Mes factures
               </Link>
             </>
           )}
@@ -48,35 +47,31 @@ const Navbar = () => {
           {user?.role === "ADMIN" && (
             <>
               <Link className={`nav-link text-white hover-effect ${isActive("/admin/catalog")}`} to="/admin/catalog">
-                Gérer le Catalogue
-              </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/admin/vehicles")}`} to="/admin/vehicles">
-                Gérer les véhicules
+                <FaList className="me-2" /> Gérer le Catalogue
               </Link>
               <Link className={`nav-link text-white hover-effect ${isActive("/admin/orders")}`} to="/admin/orders">
-                Gérer les commandes
+                <FaCogs className="me-2" /> Gérer les commandes
               </Link>
               <Link className={`nav-link text-white hover-effect ${isActive("/admin/customers")}`} to="/admin/customers">
-                Gérer les clients
+                <FaUser className="me-2" /> Gérer les clients
               </Link>
               <Link className={`nav-link text-white hover-effect ${isActive("/admin/options")}`} to="/admin/options">
-                Gérer les options
+                <FaCogs className="me-2" /> Gérer les options
               </Link>
             </>
           )}
         </div>
 
-        {/* Liens de profil et de connexion/déconnexion */}
+        {/* Liens de profil et de connexion/déconnexion avec icônes */}
         <div className="d-flex ms-auto">
           {user ? (
             <>
-              {/* Profil et déconnexion */}
-              <Link className={`btn btn-outline-light me-2 hover-effect ${isActive("/profile")}`} to="/profile">
-                <FaUser className="me-2" /> Profil
+              {/* Profil et déconnexion avec icônes uniquement */}
+             {/* Profil */}
+              <Link className={`btn btn-outline-light profil-btn hover-effect ${isActive("/profile")}`} to="/profile">
+                <FaUser className="me-2" />
               </Link>
-              <Link className={`btn btn-outline-light hover-effect ${isActive("/logout")}`} to="/logout">
-                <FaSignOutAlt className="me-2" /> Se déconnecter
-              </Link>
+
             </>
           ) : (
             <>
