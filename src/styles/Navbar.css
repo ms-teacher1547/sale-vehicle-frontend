@@ -1,6 +1,7 @@
 /* Dégradé pour le fond du Navbar */
 .navbar {
   background: linear-gradient(to right, #2a5298, #1e3c72); /* Dégradé du bleu clair au bleu foncé */
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Effet de survol des liens de navigation */

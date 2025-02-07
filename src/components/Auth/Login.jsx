@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const success = await login(username, password);
       if (success) {
-        navigate("/profile");
+        navigate("/");
       } else {
         setError("Identifiants incorrects");
       }

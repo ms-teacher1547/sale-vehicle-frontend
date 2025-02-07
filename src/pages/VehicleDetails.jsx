@@ -5,6 +5,7 @@ import { FaCar, FaGasPump, FaTachometerAlt, FaCalendarAlt, FaMoneyBillWave, FaAr
 import { useAuth } from "../context/AuthContext";
 
 const API_URL = "http://localhost:8081/api/catalog/vehicles";
+const API_URL_CART = "http://localhost:8081/api/cart"; // URL du panier
 
 const VehicleDetails = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const VehicleDetails = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setCartItems } = useAuth();
 
   useEffect(() => {
     const fetchVehicleDetails = async () => {
@@ -32,6 +33,30 @@ const VehicleDetails = () => {
 
   const handleBuyClick = () => {
     navigate(`/choose-options/${id}`);
+  };
+
+  const addToCart = async (vehicle) => {
+    if (!vehicle || !vehicle.id) {
+      console.error("Le véhicule est invalide.");
+      return;
+    }
+    
+    try {
+      await axios.post(
+        `${API_URL_CART}/add`,
+        {
+          vehicleId: vehicle.id,
+          options: [], // Ajoutez les options si nécessaire
+          quantity: 1 // Ajustez selon les besoins
+        },
+        { withCredentials: true }
+      );
+  
+      navigate("/cart"); // Redirection vers le panier après ajout
+    } catch (error) {
+      console.error("❌ Erreur lors de l'ajout au panier :", error);
+      setError("Impossible d'ajouter le véhicule au panier.");
+    }
   };
 
   if (loading) {
@@ -284,22 +309,8 @@ const VehicleDetails = () => {
 
             {user && vehicle.stockQuantity > 0 && (
               <button
-                onClick={handleBuyClick}
-                style={{
-                  flex: 2,
-                  padding: "0.75rem",
-                  backgroundColor: "var(--primary-main)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "0.5rem"
-                }}
+                className="btn btn-primary"
+                onClick={() => addToCart(vehicle)}
               >
                 <FaShoppingCart />
                 Commander

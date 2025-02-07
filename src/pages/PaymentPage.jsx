@@ -83,7 +83,7 @@ const PaymentPage = () => {
     <div className="container" style={{ padding: '2rem', backgroundColor: 'var(--background)' }}>
       <div style={{ 
         backgroundColor: 'var(--primary-dark)', 
-        padding: '5rem 1rem', 
+        padding: '6rem 1rem', 
         marginBottom: '2rem',
         borderRadius: '0 0 20px 20px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'

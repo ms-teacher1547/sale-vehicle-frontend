@@ -138,7 +138,7 @@ const CatalogPage = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '1rem'
           }}>
             <input
@@ -249,7 +249,7 @@ const CatalogPage = () => {
         ) : (
           <div style={{
             display: viewMode === "grid" ? 'grid' : 'flex',
-            gridTemplateColumns: viewMode === "grid" ? 'repeat(auto-fill, minmax(300px, 1fr))' : '1fr',
+            gridTemplateColumns: viewMode === "grid" ? 'repeat(auto-fill, minmax(500px, 1fr))' : '1fr',
             gap: '2rem',
             flexDirection: viewMode === "grid" ? 'unset' : 'column'
           }}>

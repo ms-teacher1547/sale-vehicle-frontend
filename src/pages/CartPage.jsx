@@ -27,12 +27,10 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    if (!user || !user.customer) {
-      navigate("/login");
-      return;
-    }
-    fetchCart();
-  }, [user, navigate]);
+    
+      fetchCart();
+    
+  }, []);
 
   const removeFromCart = async (itemId) => {
     if (!window.confirm("Voulez-vous vraiment supprimer cet article ?")) return;

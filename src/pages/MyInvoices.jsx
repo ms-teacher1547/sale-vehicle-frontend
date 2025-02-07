@@ -9,6 +9,7 @@ const MyInvoices = () => {
   const { user } = useAuth();
   const [invoices, setInvoices] = useState([]);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!user || !user.customer) return;
@@ -19,7 +20,8 @@ const MyInvoices = () => {
   const fetchInvoices = async () => {
     try {
       const response = await axios.get(`${API_URL}/my-invoices`, { withCredentials: true });
-      setInvoices(response.data);
+      const sortedInvoices = response.data.sort((a, b) => b.id - a.id); // Trier par ID décroissant
+      setInvoices(sortedInvoices);
     } catch (error) {
       console.error("❌ Erreur lors du chargement des factures :", error);
       setError("Impossible de charger vos factures.");
@@ -73,6 +75,21 @@ const MyInvoices = () => {
         }}>Consultez et téléchargez vos factures</p>
       </div>
 
+      <input 
+        type="text" 
+        placeholder="Rechercher une facture..." 
+        value={searchTerm} 
+        onChange={(e) => setSearchTerm(e.target.value)} 
+        style={{
+          width: '100%',
+          padding: '1rem',
+          fontSize: '1.1rem',
+          borderRadius: '8px',
+          border: '1px solid var(--border)',
+          marginBottom: '1rem'
+        }}
+      />
+
       {error && (
         <div style={{
           backgroundColor: 'var(--error)',
@@ -99,7 +116,9 @@ const MyInvoices = () => {
         </div>
       ) : (
         <div className="grid" style={{ gap: '1.5rem' }}>
-          {invoices.map((invoice) => (
+          {invoices.filter(invoice => 
+            invoice.title.toLowerCase().includes(searchTerm.toLowerCase())
+          ).map(invoice => (
             <div key={invoice.id} style={{ 
               padding: '1.5rem', 
               backgroundColor: 'var(--surface)',

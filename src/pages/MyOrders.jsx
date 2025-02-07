@@ -20,18 +20,15 @@ const MyOrders = () => {
   const [showDocuments, setShowDocuments] = useState(true);
 
   useEffect(() => {
-    if (!user || !user.customer) {
-      navigate("/login");
-      return;
-    }
     fetchOrders();
-  }, [user, navigate]);
+  }, []);
 
   // 🔹 Récupérer les commandes du client connecté
   const fetchOrders = async () => {
     try {
       const response = await axios.get(`${API_URL}/my-orders`, { withCredentials: true });
-      setOrders(response.data);
+      const sortedOrders = response.data.sort((a, b) => new Date(b.dateDeCommande) - new Date(a.dateDeCommande)); // Trier par date décroissante
+      setOrders(sortedOrders);
     } catch (error) {
       console.error("❌ Erreur lors du chargement des commandes :", error);
       setError("Impossible de charger vos commandes.");
@@ -45,7 +42,8 @@ const MyOrders = () => {
     try {
       await axios.put(`${API_URL}/status?next=true`, {}, { withCredentials: true });
       alert("✅ Commande confirmée avec succès !");
-      fetchOrders(); // 🔄 Rafraîchir les commandes après confirmation
+      // Ne pas réinitialiser les documents ici
+      fetchOrders(); // Rafraîchir les commandes après confirmation
     } catch (error) {
       console.error("❌ Erreur lors de la confirmation :", error);
       setError("Impossible de confirmer la commande.");
@@ -58,7 +56,8 @@ const MyOrders = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/my-documents`, { withCredentials: true });
-      setDocuments(response.data);
+      const sortedDocuments = response.data.sort((a, b) => b.id - a.id); // Trier par ID décroissant
+      setDocuments(sortedDocuments);
       setSelectedOrderId(orderId);
       setError("");
     } catch (error) {
@@ -105,8 +104,8 @@ const MyOrders = () => {
     
       <div className="myorders-container">
         <div className="page-header">
-          <h2>📦 Mes Commandes</h2>
-          <p className="text-muted">Gérez vos commandes et accédez à vos documents</p>
+          <h2 className="text-white">📦 Mes Commandes</h2>
+          <p className="text-white text-center">Gérez vos commandes et accédez à vos documents</p>
         </div>
         <div className="row">
           <div className="col-md-8">
@@ -143,6 +142,19 @@ const MyOrders = () => {
                     ))}
                   </div>
                   
+                  {order.options && order.options.length > 0 && (
+                    <div>
+                      <h4>Options ajoutées :</h4>
+                      <ul>
+                        {order.options.map(option => (
+                          <li key={option.id}>
+                            {option.name} - {option.price} FCFA
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
                   <div className="order-total mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
                     <span className="total-label">Total de la commande</span>
                     <span className="total-amount">{order.totalPrice.toLocaleString()} FCFA</span>
@@ -159,26 +171,28 @@ const MyOrders = () => {
                       </button>
                     )}
                     
-                    {order.status === "VALIDEE" && (
+                    {(order.status === "VALIDEE" || order.status === "LIVREE") && (
                       <>
                         <button 
                           className="btn btn-info" 
                           onClick={() => {
                             fetchDocuments(order.id);
-                            setShowDocuments(true);
+                            setShowDocuments(true); // Pour afficher les documents
                           }}
                         >
                           <i className="fas fa-file-alt me-2"></i>
                           Voir les documents
                         </button>
-                        <button 
-                          className="btn btn-success" 
-                          onClick={() => navigate(`/payment/${order.id}`)}
-                        >
-                          <FaCreditCard className="me-2" />
-                          Procéder au paiement
-                        </button>
-                      </>
+                        {order.status === "VALIDEE" && (
+                          <button 
+                            className="btn btn-success" 
+                            onClick={() => navigate(`/payment/${order.id}`)}
+                          >
+                            <FaCreditCard className="me-2" />
+                            Procéder au paiement
+                          </button>
+                        )}
+                                              </>
                     )}
                   </div>
                 </div>
