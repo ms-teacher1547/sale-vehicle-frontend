@@ -229,7 +229,7 @@ const AdminCustomers = () => {
                           </button>
                           {customer.type === "COMPANY" && (
                             <button 
-                              onClick={() => navigate(`subsidiaries/${customer.id}`)}
+                              onClick={() => navigate(`${customer.id}/subsidiaries`)}
                               style={{
                                 backgroundColor: 'var(--primary-light)',
                                 color: 'white',

@@ -39,7 +39,7 @@ const AppRoutes = () => {
     "/my-invoices",
     "/catalog",
     "/vehicle/:id",
-    "/subsidiaries/:companyId",
+    "/:companyId/subsidiaries",
   ];
 
   // Vérification si la page actuelle est dans la liste des pages sans footer
@@ -61,7 +61,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/subsidiaries" element={<SubsidiaryManagement />} />
         <Route path="/admin/customers" element={<AdminCustomers />} />
-        <Route path="/subsidiaries/:companyId" element={<SubsidiaryManagement />} />
+        <Route path="/:companyId/subsidiaries" element={<SubsidiaryManagement />} />
         <Route path="/admin/options" element={<AdminOptions />} />
         <Route path="/choose-options" element={<ChooseOptions />} />
         <Route path="/my-orders" element={<MyOrders />} />
