@@ -86,117 +86,365 @@ const AdminOptions = () => {
   };
 
   return (
-    <div className="admin-options-container">
-    <div className="container mt-5">
-      <h2 className="text-center text-primary">Gestion des Options ⚙️</h2>
-
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      <div className="card p-4 shadow-sm">
-        <h4>Ajouter une nouvelle option</h4>
-        <input 
-          type="text" 
-          placeholder="Nom" 
-          value={newOption.name} 
-          onChange={(e) => setNewOption({ ...newOption, name: e.target.value })} 
-          className="form-control mb-3" 
-        />
-        <input 
-          type="number" 
-          placeholder="Prix" 
-          value={newOption.price} 
-          onChange={(e) => setNewOption({ ...newOption, price: e.target.value })} 
-          className="form-control mb-3" 
-        />
-        <select 
-          value={newOption.category} 
-          onChange={(e) => setNewOption({ ...newOption, category: e.target.value })} 
-          className="form-control mb-3"
-        >
-          <option value="PERFORMANCE">Performance</option>
-          <option value="SECURITE">Sécurité</option>
-          <option value="CONFORT">Confort</option>
-          <option value="MULTIMEDIA">Multimédia</option>
-        </select>
-        <button className="btn btn-success w-100" onClick={addOption}>➕ Ajouter</button>
+    <div style={{ 
+      backgroundColor: 'var(--background)', 
+      minHeight: '100vh',
+      padding: '2rem'
+    }}>
+      <div style={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        padding: '3rem 1rem', 
+        marginBottom: '2rem',
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <h2 style={{ 
+          color: 'var(--surface)', 
+          marginBottom: '0', 
+          textAlign: 'center', 
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          letterSpacing: '2px'
+        }}>⚙️ Gestion des Options</h2>
       </div>
 
-      <div className="card p-4 mt-4 shadow-sm">
-        <h4>Définir une incompatibilité entre deux options 🚫</h4>
-        <select 
-          value={incompatibility.optionId1} 
-          onChange={(e) => setIncompatibility({ ...incompatibility, optionId1: e.target.value })} 
-          className="form-control mb-3"
-        >
-          <option value="">Sélectionner la première option</option>
-          {options.map(option => (
-            <option key={option.id} value={option.id}>{option.name}</option>
-          ))}
-        </select>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        display: 'grid',
+        gap: '2rem'
+      }}>
+        {error && (
+          <div style={{
+            backgroundColor: 'var(--error)',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            {error}
+          </div>
+        )}
 
-        <select 
-          value={incompatibility.optionId2} 
-          onChange={(e) => setIncompatibility({ ...incompatibility, optionId2: e.target.value })} 
-          className="form-control mb-3"
-        >
-          <option value="">Sélectionner la deuxième option</option>
-          {options.map(option => (
-            <option key={option.id} value={option.id}>{option.name}</option>
-          ))}
-        </select>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: '2rem'
+        }}>
+          {/* Add Option Form */}
+          <div style={{
+            backgroundColor: 'var(--surface)',
+            padding: '2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            <h3 style={{ 
+              color: 'var(--primary-dark)',
+              marginBottom: '1.5rem',
+              fontSize: '1.5rem',
+              fontWeight: 'bold'
+            }}>Ajouter une option</h3>
 
-        <button className="btn btn-danger w-100" onClick={addIncompatibility}>🚫 Ajouter Incompatibilité</button>
-      </div>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              <input 
+                type="text" 
+                placeholder="Nom de l'option" 
+                value={newOption.name} 
+                onChange={(e) => setNewOption({ ...newOption, name: e.target.value })} 
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  width: '100%'
+                }}
+              />
+              <input 
+                type="number" 
+                placeholder="Prix en FCFA" 
+                value={newOption.price} 
+                onChange={(e) => setNewOption({ ...newOption, price: e.target.value })} 
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  width: '100%'
+                }}
+              />
+              <select 
+                value={newOption.category} 
+                onChange={(e) => setNewOption({ ...newOption, category: e.target.value })} 
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  backgroundColor: 'var(--background)',
+                  color: 'var(--text-primary)',
+                  width: '100%'
+                }}
+              >
+                <option value="PERFORMANCE">Performance</option>
+                <option value="SECURITE">Sécurité</option>
+                <option value="CONFORT">Confort</option>
+                <option value="MULTIMEDIA">Multimédia</option>
+              </select>
 
-      <div className="mt-4">
-        <h4>Options existantes</h4>
-        {options.length === 0 ? (
-          <p>Aucune option enregistrée.</p>
-        ) : (
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Prix</th>
-                <th>Catégorie</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {options.map(option => (
-                <tr key={option.id}>
-                  <td>{option.name}</td>
-                  <td>{option.price} FCFA</td>
-                  <td>{option.category}</td>
-                  <td>
-                    <button className="btn btn-danger btn-sm" onClick={() => deleteOption(option.id)}>❌ Supprimer</button>
-                  </td>
+              <button 
+                onClick={addOption}
+                style={{
+                  backgroundColor: 'var(--success)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                ➕ Ajouter l'option
+              </button>
+            </div>
+          </div>
+
+          {/* Add Incompatibility Form */}
+          <div style={{
+            backgroundColor: 'var(--surface)',
+            padding: '2rem',
+            borderRadius: '12px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            <h3 style={{ 
+              color: 'var(--primary-dark)',
+              marginBottom: '1.5rem',
+              fontSize: '1.5rem',
+              fontWeight: 'bold'
+            }}>🚫 Définir une incompatibilité</h3>
+
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              <select 
+                value={incompatibility.optionId1} 
+                onChange={(e) => setIncompatibility({ ...incompatibility, optionId1: e.target.value })} 
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  backgroundColor: 'var(--background)',
+                  color: 'var(--text-primary)',
+                  width: '100%'
+                }}
+              >
+                <option value="">Sélectionner la première option</option>
+                {options.map(option => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
+
+              <select 
+                value={incompatibility.optionId2} 
+                onChange={(e) => setIncompatibility({ ...incompatibility, optionId2: e.target.value })} 
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  backgroundColor: 'var(--background)',
+                  color: 'var(--text-primary)',
+                  width: '100%'
+                }}
+              >
+                <option value="">Sélectionner la deuxième option</option>
+                {options.map(option => (
+                  <option key={option.id} value={option.id}>{option.name}</option>
+                ))}
+              </select>
+
+              <button 
+                onClick={addIncompatibility}
+                style={{
+                  backgroundColor: 'var(--error)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                🚫 Ajouter l'incompatibilité
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Options List */}
+        <div style={{
+          backgroundColor: 'var(--surface)',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          overflowX: 'auto'
+        }}>
+          <h3 style={{ 
+            color: 'var(--primary-dark)',
+            marginBottom: '1.5rem',
+            fontSize: '1.5rem',
+            fontWeight: 'bold'
+          }}>Options existantes</h3>
+
+          {options.length === 0 ? (
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem',
+              color: 'var(--text-secondary)'
+            }}>
+              Aucune option enregistrée.
+            </div>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid var(--border)' }}>
+                  <th style={{ padding: '1rem', textAlign: 'left' }}>Nom</th>
+                  <th style={{ padding: '1rem', textAlign: 'left' }}>Prix</th>
+                  <th style={{ padding: '1rem', textAlign: 'left' }}>Catégorie</th>
+                  <th style={{ padding: '1rem', textAlign: 'left' }}>Actions</th>
                 </tr>
+              </thead>
+              <tbody>
+                {options.map(option => (
+                  <tr 
+                    key={option.id}
+                    style={{ 
+                      borderBottom: '1px solid var(--border)',
+                      backgroundColor: 'var(--background)'
+                    }}
+                  >
+                    <td style={{ padding: '1rem' }}>{option.name}</td>
+                    <td style={{ padding: '1rem' }}>{option.price.toLocaleString()} FCFA</td>
+                    <td style={{ padding: '1rem' }}>
+                      <span style={{ 
+                        backgroundColor: 
+                          option.category === 'PERFORMANCE' ? 'var(--primary-main)' :
+                          option.category === 'SECURITE' ? 'var(--accent)' :
+                          option.category === 'CONFORT' ? 'var(--success)' :
+                          'var(--primary-light)',
+                        color: 'white',
+                        padding: '0.25rem 0.75rem',
+                        borderRadius: '12px',
+                        fontSize: '0.9rem'
+                      }}>
+                        {option.category}
+                      </span>
+                    </td>
+                    <td style={{ padding: '1rem' }}>
+                      <button 
+                        onClick={() => deleteOption(option.id)}
+                        style={{
+                          backgroundColor: 'var(--error)',
+                          color: 'white',
+                          border: 'none',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          fontSize: '0.9rem'
+                        }}
+                      >
+                        ❌ Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        {/* Incompatible Options List */}
+        <div style={{
+          backgroundColor: 'var(--surface)',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h3 style={{ 
+            color: 'var(--primary-dark)',
+            marginBottom: '1.5rem',
+            fontSize: '1.5rem',
+            fontWeight: 'bold'
+          }}>🚫 Options Incompatibles</h3>
+
+          {incompatibleOptions.length === 0 ? (
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem',
+              color: 'var(--text-secondary)'
+            }}>
+              Aucune incompatibilité définie.
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gap: '0.5rem' }}>
+              {incompatibleOptions.map((pair, index) => (
+                <div 
+                  key={index}
+                  style={{
+                    backgroundColor: 'var(--background)',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <span style={{ 
+                    backgroundColor: 'var(--primary-main)',
+                    color: 'white',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '12px',
+                    fontSize: '0.9rem'
+                  }}>{pair.option1.name}</span>
+                  <span style={{ color: 'var(--error)' }}>❌</span>
+                  <span style={{ 
+                    backgroundColor: 'var(--primary-main)',
+                    color: 'white',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '12px',
+                    fontSize: '0.9rem'
+                  }}>{pair.option2.name}</span>
+                </div>
               ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
 
-      <div className="mt-4">
-        <h4>Options Incompatibles 🚫</h4>
-        {incompatibleOptions.length === 0 ? (
-          <p>Aucune incompatibilité définie.</p>
-        ) : (
-          <ul>
-            {incompatibleOptions.map((pair, index) => (
-              <li key={index}>
-                {pair.option1.name} ❌ {pair.option2.name}
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Back Button */}
+        <button 
+          onClick={() => navigate("/profile")}
+          style={{
+            backgroundColor: 'var(--primary-light)',
+            color: 'white',
+            border: 'none',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            width: 'fit-content'
+          }}
+        >
+          🔙 Retour au Profil
+        </button>
       </div>
-
-      <div className="d-flex justify-content-center mt-4">
-        <button className="btn btn-secondary" onClick={() => navigate("/profile")}>🔙 Retour au Profil</button>
-      </div>
-    </div>
     </div>
   );
 };

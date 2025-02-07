@@ -12,74 +12,256 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path ? "active" : "";
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg position-fixed w-100 top-0 start-0">
-      <div className="container-fluid d-flex justify-content-between">
-        {/* Logo et lien vers la page d'accueil */}
-        <Link className="navbar-brand text-white fw-bold" to="/">
-          Sale Vehicle
+    <nav style={{
+      backgroundColor: 'var(--primary-dark)',
+      padding: '1rem',
+      position: 'fixed',
+      width: '100%',
+      top: 0,
+      left: 0,
+      zIndex: 1000,
+      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+    }}>
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 1rem'
+      }}>
+        {/* Logo */}
+        <Link 
+          to="/"
+          style={{
+            color: 'var(--surface)',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}
+        >
+          🚗 Sale Vehicle
         </Link>
 
-        {/* Liens principaux de la navigation */}
-        <div className="navbar-nav mx-auto">
-          <Link className={`nav-link text-white hover-effect ${isActive("/")}`} to="/">
-            <FaHome className="me-2" /> Accueil
+        {/* Navigation Links */}
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          alignItems: 'center'
+        }}>
+          <Link 
+            to="/"
+            style={{
+              color: location.pathname === '/' ? 'var(--accent)' : 'var(--surface)',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontSize: '0.9rem',
+              fontWeight: location.pathname === '/' ? 'bold' : 'normal',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <FaHome /> Accueil
           </Link>
 
-          {/* Panier visible uniquement pour les utilisateurs */}
+          {/* User Links */}
           {user?.role === "USER" && (
             <>
-              <Link className={`nav-link text-white hover-effect ${isActive("/catalog")}`} to="/catalog">
-                <FaList className="me-2" /> Catalogue
+              <Link 
+                to="/catalog"
+                style={{
+                  color: location.pathname === '/catalog' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/catalog' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaList /> Catalogue
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/cart")}`} to="/cart">
-                <FaShoppingCart className="me-2" /> Panier
+              <Link 
+                to="/cart"
+                style={{
+                  color: location.pathname === '/cart' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/cart' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaShoppingCart /> Panier
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/my-orders")}`} to="/my-orders">
-                <FaBox className="me-2" /> Mes commandes
+              <Link 
+                to="/my-orders"
+                style={{
+                  color: location.pathname === '/my-orders' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/my-orders' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaBox /> Mes commandes
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/my-invoices")}`} to="/my-invoices">
-                <FaBox className="me-2" /> Mes factures
+              <Link 
+                to="/my-invoices"
+                style={{
+                  color: location.pathname === '/my-invoices' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/my-invoices' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaBox /> Mes factures
               </Link>
             </>
           )}
 
-          {/* Liens admin visibles uniquement pour les administrateurs */}
+          {/* Admin Links */}
           {user?.role === "ADMIN" && (
             <>
-              <Link className={`nav-link text-white hover-effect ${isActive("/admin/catalog")}`} to="/admin/catalog">
-                <FaList className="me-2" /> Gérer le Catalogue
+              <Link 
+                to="/admin/catalog"
+                style={{
+                  color: location.pathname === '/admin/catalog' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/admin/catalog' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaList /> Gérer le Catalogue
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/admin/orders")}`} to="/admin/orders">
-                <FaCogs className="me-2" /> Gérer les commandes
+              <Link 
+                to="/admin/orders"
+                style={{
+                  color: location.pathname === '/admin/orders' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/admin/orders' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaCogs /> Gérer les commandes
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/admin/customers")}`} to="/admin/customers">
-                <FaUser className="me-2" /> Gérer les clients
+              <Link 
+                to="/admin/customers"
+                style={{
+                  color: location.pathname === '/admin/customers' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/admin/customers' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaUser /> Gérer les clients
               </Link>
-              <Link className={`nav-link text-white hover-effect ${isActive("/admin/options")}`} to="/admin/options">
-                <FaCogs className="me-2" /> Gérer les options
+              <Link 
+                to="/admin/options"
+                style={{
+                  color: location.pathname === '/admin/options' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/admin/options' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaCogs /> Gérer les options
               </Link>
             </>
           )}
         </div>
 
-        {/* Liens de profil et de connexion/déconnexion avec icônes */}
-        <div className="d-flex ms-auto">
+        {/* Auth Links */}
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center'
+        }}>
           {user ? (
-            <>
-              {/* Profil et déconnexion avec icônes uniquement */}
-             {/* Profil */}
-              <Link className={`btn btn-outline-light profil-btn hover-effect ${isActive("/profile")}`} to="/profile">
-                <FaUser className="me-2" />
-              </Link>
-
-            </>
+            <Link 
+              to="/profile"
+              style={{
+                backgroundColor: 'transparent',
+                border: '2px solid var(--surface)',
+                color: 'var(--surface)',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s ease',
+                fontSize: '0.9rem'
+              }}
+            >
+              <FaUser /> Profil
+            </Link>
           ) : (
             <>
-              {/* Si l'utilisateur n'est pas connecté */}
-              <Link className={`btn btn-outline-light me-2 hover-effect ${isActive("/login")}`} to="/login">
+              <Link 
+                to="/login"
+                style={{
+                  backgroundColor: 'transparent',
+                  border: '2px solid var(--surface)',
+                  color: 'var(--surface)',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease',
+                  fontSize: '0.9rem'
+                }}
+              >
                 Connexion
               </Link>
-              <Link className={`btn btn-light text-primary hover-effect ${isActive("/register")}`} to="/register">
+              <Link 
+                to="/register"
+                style={{
+                  backgroundColor: 'var(--surface)',
+                  color: 'var(--primary-dark)',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s ease',
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold'
+                }}
+              >
                 Inscription
               </Link>
             </>

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Spinner } from "react-bootstrap";
-import { FaCar, FaTrash, FaEdit, FaSave, FaArrowLeft } from "react-icons/fa";
+import { FaCar, FaTrash, FaEdit, FaSave, FaArrowLeft, FaSearch, FaList } from "react-icons/fa";
 import "../styles/AdminCatalog.css";
 
 const API_URL = "http://localhost:8081/api/catalog/vehicles";
@@ -21,6 +21,13 @@ const AdminCatalog = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [vehicleType, setVehicleType] = useState("car");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+  const [filterConfig, setFilterConfig] = useState({
+    search: "",
+    fuelType: "all",
+    yearMin: "",
+    yearMax: ""
+  });
   const [newVehicle, setNewVehicle] = useState({
     name: "",
     price: "",
@@ -38,6 +45,59 @@ const AdminCatalog = () => {
   useEffect(() => {
     fetchVehicles();
   }, []);
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getFilteredAndSortedVehicles = () => {
+    let filteredVehicles = [...vehicles];
+
+    // Apply filters
+    if (filterConfig.search) {
+      const searchLower = filterConfig.search.toLowerCase();
+      filteredVehicles = filteredVehicles.filter(vehicle =>
+        vehicle.name.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (filterConfig.fuelType !== 'all') {
+      filteredVehicles = filteredVehicles.filter(vehicle =>
+        vehicle.fuelType === filterConfig.fuelType
+      );
+    }
+
+    if (filterConfig.yearMin) {
+      filteredVehicles = filteredVehicles.filter(vehicle =>
+        vehicle.yearOfManufacture >= parseInt(filterConfig.yearMin)
+      );
+    }
+
+    if (filterConfig.yearMax) {
+      filteredVehicles = filteredVehicles.filter(vehicle =>
+        vehicle.yearOfManufacture <= parseInt(filterConfig.yearMax)
+      );
+    }
+
+    // Apply sorting
+    if (sortConfig.key) {
+      filteredVehicles.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
+    return filteredVehicles;
+  };
 
   const fetchVehicles = () => {
     setLoading(true);
@@ -126,27 +186,101 @@ const AdminCatalog = () => {
   if (loading) return <Spinner animation="border" role="status" />;
 
   return (
-    <div className="admin-container">
-      <h2 className="mb-4 text-center">Gestion des Véhicules <FaCar /></h2>
+    <div className="admin-container" style={{ padding: '5rem', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+      <div className="row mb-4">
+        <div className="col-12">
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1.5rem',
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            marginBottom: '2rem'
+          }}>
+            <h2 style={{ margin: 0, color: '#2c3e50', fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FaCar style={{ color: '#3498db' }} /> Gestion des Véhicules
+            </h2>
 
-      {/* ✅ Boutons de navigation et réduction */}
-      <div className="d-flex justify-content-between mb-3">
-        <button className="btn btn-outline-primary" onClick={() => navigate("/catalog")}>
-          <FaArrowLeft /> Retour au Catalogue
-        </button>
-        <button className="btn btn-warning" onClick={applyDiscount}>
-          💰 Appliquer une réduction (-20%)
-        </button>
+            <div>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button 
+                  className="btn btn-outline-primary" 
+                  onClick={() => navigate("/catalog")}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    fontWeight: '500'
+                  }}
+                >
+                  <FaArrowLeft /> Retour au Catalogue
+                </button>
+                <button 
+                  className="btn btn-warning" 
+                  onClick={applyDiscount}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    fontWeight: '500',
+                    backgroundColor: '#f1c40f',
+                    border: 'none',
+                    color: '#2c3e50'
+                  }}
+                >
+                  💰 Appliquer une réduction (-20%)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ✅ Formulaire d'ajout */}
-      <div className="mb-4">
-        <h4>Ajouter un véhicule</h4>
-        <select className="form-control mb-2" value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}>
+      <div style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '10px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        marginBottom: '2rem'
+      }}>
+        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>
+          <FaCar style={{ marginRight: '10px' }} /> Ajouter un véhicule
+        </h4>
+        <select 
+          className="form-control mb-3" 
+          value={vehicleType} 
+          onChange={(e) => setVehicleType(e.target.value)}
+          style={{
+            padding: '0.75rem',
+            borderRadius: '8px',
+            border: '1px solid #e2e8f0',
+            backgroundColor: '#f8f9fa'
+          }}>
           <option value="car">🚗 Voiture</option>
           <option value="scooter">🛵 Scooter</option>
         </select>
-        <input type="text" name="name" placeholder="Nom" value={newVehicle.name} onChange={handleInputChange} className="form-control mb-2" />
+        <input 
+          type="text" 
+          name="name" 
+          placeholder="Nom" 
+          value={newVehicle.name} 
+          onChange={handleInputChange} 
+          className="form-control mb-3" 
+          style={{
+            padding: '0.75rem',
+            borderRadius: '8px',
+            border: '1px solid #e2e8f0'
+          }}
+        />
         <input type="number" name="price" placeholder="Prix (FCFA)" value={newVehicle.price} onChange={handleInputChange} className="form-control mb-2" />
         <input type="number" name="stockQuantity" placeholder="Quantité en stock" value={newVehicle.stockQuantity} onChange={handleInputChange} className="form-control mb-2" />
         <input type="number" name="yearOfManufacture" placeholder="Année" value={newVehicle.yearOfManufacture} onChange={handleInputChange} className="form-control mb-2" />
@@ -179,25 +313,116 @@ const AdminCatalog = () => {
           </div>
         )}
 
-        <button className="btn btn-success mt-2" onClick={addVehicle}><FaSave /> Ajouter</button>
+        <button 
+          className="btn btn-success mt-3" 
+          onClick={addVehicle}
+          style={{
+            padding: '0.75rem 2rem',
+            borderRadius: '8px',
+            backgroundColor: '#2ecc71',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontWeight: '500',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <FaSave /> Ajouter
+        </button>
+      </div>
+
+      {/* ✅ Filtres et recherche */}
+      <div style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '10px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        marginBottom: '2rem'
+      }}>
+        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <FaSearch style={{ color: '#3498db' }} /> Filtres
+        </h4>
+        <div className="row g-3">
+          <div className="col-md-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Rechercher..."
+              value={filterConfig.search}
+              onChange={(e) => setFilterConfig({ ...filterConfig, search: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <select
+              className="form-control"
+              value={filterConfig.fuelType}
+              onChange={(e) => setFilterConfig({ ...filterConfig, fuelType: e.target.value })}
+            >
+              <option value="all">Tous les carburants</option>
+              <option value="essence">Essence</option>
+              <option value="electric">Électrique</option>
+              <option value="diesel">Diesel</option>
+            </select>
+          </div>
+          <div className="col-md-3">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Année min"
+              value={filterConfig.yearMin}
+              onChange={(e) => setFilterConfig({ ...filterConfig, yearMin: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Année max"
+              value={filterConfig.yearMax}
+              onChange={(e) => setFilterConfig({ ...filterConfig, yearMax: e.target.value })}
+            />
+          </div>
+        </div>
       </div>
 
       {/* ✅ Liste des véhicules */}
-      <h4>Véhicules existants</h4>
-      <table className="table">
-        <thead>
+      <div style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '10px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <FaList style={{ color: '#3498db' }} /> Véhicules existants
+        </h4>
+        <div className="table-responsive">
+          <table className="table table-hover" style={{ marginBottom: 0 }}>
+        <thead style={{ backgroundColor: '#f8f9fa' }}>
           <tr>
-            <th>Nom</th>
-            <th>Prix</th>
-            <th>Année</th>
-            <th>Carburant</th>
-            <th>Kilométrage</th>
-            <th>Quantité</th>
+            <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>
+              Nom {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => requestSort('price')} style={{ cursor: 'pointer' }}>
+              Prix {sortConfig.key === 'price' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => requestSort('yearOfManufacture')} style={{ cursor: 'pointer' }}>
+              Année {sortConfig.key === 'yearOfManufacture' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => requestSort('fuelType')} style={{ cursor: 'pointer' }}>
+              Carburant {sortConfig.key === 'fuelType' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => requestSort('mileage')} style={{ cursor: 'pointer' }}>
+              Kilométrage {sortConfig.key === 'mileage' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => requestSort('stockQuantity')} style={{ cursor: 'pointer' }}>
+              Quantité {sortConfig.key === 'stockQuantity' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {vehicles.map(vehicle => (
+          {getFilteredAndSortedVehicles().map(vehicle => (
             <tr key={vehicle.id}>
               <td>{vehicle.name}</td>
               <td>{vehicle.price} FCFA</td>
@@ -206,7 +431,22 @@ const AdminCatalog = () => {
               <td>{vehicle.mileage} km</td>
               <td>{vehicle.stockQuantity}</td>
               <td>
-                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(vehicle)}><FaTrash /> Supprimer</button>
+                <button 
+                  className="btn btn-danger btn-sm" 
+                  onClick={() => confirmDelete(vehicle)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '6px',
+                    backgroundColor: '#e74c3c',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  <FaTrash /> Supprimer
+                </button>
               </td>
             </tr>
           ))}
@@ -226,6 +466,8 @@ const AdminCatalog = () => {
           <Button variant="danger" onClick={deleteVehicle}><FaTrash /> Supprimer</Button>
         </Modal.Footer>
       </Modal>
+    </div>
+      </div>
     </div>
   );
 };

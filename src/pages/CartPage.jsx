@@ -99,47 +99,274 @@ const CartPage = () => {
     }
   };
 
-  if (!cart) return (
-    <div className="container mt-5 cart-container">
-      <div className="empty-cart-message text-center mt-5">
-        <h3 className="text-danger">Votre panier est vide</h3>
-        <p className="text-muted">Ajoutez des articles à votre panier pour commencer.</p>
+  const EmptyCart = () => (
+    <div style={{
+      backgroundColor: 'var(--surface)',
+      padding: '2rem',
+      borderRadius: '12px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      textAlign: 'center',
+      margin: '2rem auto',
+      maxWidth: '600px'
+    }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <span style={{ fontSize: '4rem' }}>🛒</span>
       </div>
+      <h3 style={{ 
+        color: 'var(--primary-dark)',
+        marginBottom: '1rem',
+        fontSize: '1.5rem',
+        fontWeight: 'bold'
+      }}>Votre panier est vide</h3>
+      <p style={{ 
+        color: 'var(--text-secondary)',
+        marginBottom: '1.5rem'
+      }}>Ajoutez des articles à votre panier pour commencer.</p>
+      <button 
+        onClick={() => navigate('/catalog')}
+        style={{
+          backgroundColor: 'var(--primary-main)',
+          color: 'white',
+          border: 'none',
+          padding: '0.75rem 1.5rem',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem'
+        }}
+      >
+        🚗 Voir le catalogue
+      </button>
     </div>
   );
 
+  if (!cart) return <EmptyCart />;
+
+  const totalPrice = cart.items.reduce((total, item) => {
+    const optionsPrice = item.options.reduce((sum, option) => sum + option.price, 0);
+    return total + (item.vehicle.price + optionsPrice) * item.quantity;
+  }, 0);
+
   return (
-    <div className="container mt-5 cart-container">
-      <h2 className="text-primary text-center">🛒 Mon Panier</h2>
+    <div style={{
+      backgroundColor: 'var(--background)',
+      minHeight: '100vh',
+      padding: '2rem'
+    }}>
+      <div style={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        padding: '5rem 1rem', 
+        marginBottom: '2rem',
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <h2 style={{ 
+          color: 'var(--surface)', 
+          marginBottom: '0', 
+          textAlign: 'center', 
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          letterSpacing: '2px'
+        }}>🛒 Mon Panier</h2>
+      </div>
 
-      {error && <div className="alert alert-danger text-center">{error}</div>}
+      {error && (
+        <div style={{
+          backgroundColor: 'var(--error)',
+          color: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          marginBottom: '1.5rem',
+          textAlign: 'center'
+        }}>
+          {error}
+        </div>
+      )}
 
-      <ul className="list-group mt-4">
-        {cart.items.map((item) => (
-          <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <strong>{item.vehicle.name}</strong> - {item.quantity}x - {item.vehicle.price} FCFA
-              <ul className="list-unstyled mt-2">
-                {item.options.map((option) => (
-                  <li key={option.id} className="text-secondary">
-                    {option.name} ({option.price} FCFA)
-                  </li>
-                ))}
-              </ul>
+      <div style={{
+        backgroundColor: 'var(--surface)',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{ marginBottom: '2rem' }}>
+          {cart.items.map((item) => (
+            <div 
+              key={item.id} 
+              style={{
+                backgroundColor: 'var(--background)',
+                padding: '1.5rem',
+                borderRadius: '8px',
+                marginBottom: '1rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                gap: '1rem'
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '0.5rem'
+                }}>
+                  <h3 style={{ 
+                    margin: '0',
+                    color: 'var(--primary-dark)',
+                    fontSize: '1.2rem',
+                    fontWeight: 'bold'
+                  }}>{item.vehicle.name}</h3>
+                  <span style={{ 
+                    backgroundColor: 'var(--primary-light)',
+                    color: 'white',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '12px',
+                    fontSize: '0.9rem'
+                  }}>{item.quantity}x</span>
+                </div>
+                <p style={{ 
+                  margin: '0 0 1rem 0',
+                  color: 'var(--accent)',
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold'
+                }}>{item.vehicle.price.toLocaleString()} FCFA</p>
+                {item.options.length > 0 && (
+                  <div style={{ 
+                    backgroundColor: 'var(--surface)',
+                    padding: '1rem',
+                    borderRadius: '8px'
+                  }}>
+                    <p style={{ 
+                      margin: '0 0 0.5rem 0',
+                      color: 'var(--primary-dark)',
+                      fontSize: '0.9rem',
+                      fontWeight: 'bold'
+                    }}>Options sélectionnées:</p>
+                    {item.options.map((option) => (
+                      <div 
+                        key={option.id}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          color: 'var(--text-secondary)',
+                          fontSize: '0.9rem',
+                          marginBottom: '0.25rem'
+                        }}
+                      >
+                        <span>{option.name}</span>
+                        <span>{option.price.toLocaleString()} FCFA</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button 
+                onClick={() => removeFromCart(item.id)}
+                style={{
+                  backgroundColor: 'var(--error)',
+                  color: 'white',
+                  border: 'none',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}
+              >
+                ❌
+              </button>
             </div>
-            <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(item.id)}>
-              ❌
-            </button>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </div>
 
-      <div className="d-flex justify-content-center mt-4">
-        <button className="btn btn-warning me-2" onClick={clearCart}>🗑️ Vider le panier</button>
-        <button className="btn btn-secondary me-2" onClick={() => navigate("/choose-options")}>🔙 Retour</button>
-        <button className="btn btn-primary" onClick={placeOrder} disabled={loading}>
-          {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
-        </button>
+        <div style={{
+          borderTop: '2px solid var(--border)',
+          paddingTop: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1.5rem'
+          }}>
+            <span style={{ 
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              color: 'var(--primary-dark)'
+            }}>Total</span>
+            <span style={{ 
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: 'var(--accent)'
+            }}>{totalPrice.toLocaleString()} FCFA</span>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+          gap: '1rem'
+        }}>
+          <button 
+            onClick={clearCart}
+            style={{
+              backgroundColor: 'var(--error)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+          >🗑️ Vider le panier</button>
+          <button 
+            onClick={() => navigate("/choose-options")}
+            style={{
+              backgroundColor: 'var(--primary-light)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+          >🔙 Retour</button>
+          <button 
+            onClick={placeOrder} 
+            disabled={loading}
+            style={{
+              backgroundColor: loading ? 'var(--border)' : 'var(--success)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
+          </button>
+        </div>
       </div>
     </div>
   );

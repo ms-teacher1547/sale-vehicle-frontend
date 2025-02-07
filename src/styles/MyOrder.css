@@ -1,13 +1,287 @@
-/* Conteneur spécifique à la page MyOrders */
+/* Variables */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --success-color: #27ae60;
+  --warning-color: #f1c40f;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur principal */
 .myorders-container {
-    background-color: #ffffff; /* Fond clair pour toute la page */
-    padding: 80px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce pour la carte */
-    max-width: 1200px;
-    margin: auto;
-    font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  padding: 8rem;
+  min-height: 100vh;
+}
+
+/* En-tête de page */
+.page-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 1rem;
+}
+
+.page-header h2 {
+  font-size: 2.25rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Carte de commande */
+.order-card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
+  border: none;
+  overflow: hidden;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.order-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+/* Liste des véhicules */
+.vehicles-list {
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  margin: 1rem 0;
+}
+
+.vehicle-item {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vehicle-item:last-child {
+  border-bottom: none;
+}
+
+.vehicle-item:hover {
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+.vehicle-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.vehicle-price {
+  font-weight: 700;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+/* Section des documents */
+.documents-section {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  height: 100%;
+  position: sticky;
+  top: 2rem;
+}
+
+.documents-section h3 {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-box {
+  margin-bottom: 1.5rem;
+}
+
+.search-box .input-group {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-box .input-group-text {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+}
+
+.search-box input {
+  border: 1px solid #e0e0e0;
+  padding: 0.75rem;
+}
+
+/* Boutons */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.btn-info {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Badges */
+.badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.badge.bg-warning {
+  background-color: var(--warning-color) !important;
+  color: var(--primary-color);
+}
+
+.badge.bg-success {
+  background-color: var(--success-color) !important;
+}
+
+/* Documents list */
+.documents-list {
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+.list-group-item {
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: rgba(52, 152, 219, 0.05);
+  transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .myorders-container {
+    padding: 1rem;
   }
+  
+  .documents-section {
+    margin-top: 2rem;
+    position: static;
+  }
+  
+  .order-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Section des documents */
+.documents-section {
+  background-color: white;
+  height: 100%;
+}
+
+.documents-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.search-box .input-group-text {
+  background-color: white;
+  color: #6c757d;
+}
+
+.search-box .form-control:focus {
+  box-shadow: none;
+  border-color: #80bdff;
+}
+
+/* Boutons d'action */
+.action-buttons .btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.action-buttons .btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Badges de statut */
+.badge {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 2rem;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+/* Scrollbar personnalisée */
+.documents-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.documents-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.documents-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.documents-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
   
   /* Titre de la page MyOrders */
   .myorders-container h2 {

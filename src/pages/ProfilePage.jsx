@@ -50,81 +50,348 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="profile-container">
-      <h2 className="profile-title">Profil de {name}</h2>
+    <div style={{ 
+        backgroundColor: 'var(--background)', 
+        minHeight: '100vh',
+        padding: '2rem'
+      }}>
+      <div style={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        padding: '5rem 1rem', 
+        marginBottom: '2rem',
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <h2 style={{ 
+          color: 'var(--surface)', 
+          marginBottom: '1rem', 
+          textAlign: 'center', 
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          letterSpacing: '2px'
+        }}>👤 Mon Profil</h2>
+        <p style={{ 
+          color: 'var(--accent)', 
+          textAlign: 'center',
+          fontSize: '1.1rem',
+          marginBottom: '0'
+        }}>{name}</p>
+      </div>
 
       {message && (
-        <div className={`alert alert-${messageType} mt-3`} role="alert">
+        <div style={{
+          backgroundColor: messageType === 'success' ? 'var(--success)' : 
+                         messageType === 'warning' ? 'var(--warning)' : 'var(--error)',
+          color: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          marginBottom: '1rem',
+          textAlign: 'center'
+        }}>
           {message}
         </div>
       )}
 
-      <div className="profile-info">
-        <p><strong>Nom :</strong> {name}</p>
-        <p><strong>Rôle :</strong> {user?.role}</p>
+      <div style={{
+        backgroundColor: 'var(--surface)',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{
+          display: 'grid',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1rem'
+          }}>
+            <div style={{
+              backgroundColor: 'var(--background)',
+              padding: '1rem',
+              borderRadius: '8px'
+            }}>
+              <p style={{ margin: '0' }}>
+                <strong style={{ color: 'var(--primary-dark)' }}>Rôle:</strong>
+                <span style={{ 
+                  backgroundColor: user?.role === 'ADMIN' ? 'var(--primary-main)' : 'var(--accent)',
+                  color: 'white',
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '12px',
+                  marginLeft: '0.5rem',
+                  fontSize: '0.9rem'
+                }}>{user?.role}</span>
+              </p>
+            </div>
 
-        {user?.customer ? (
-          <>
-            <p><strong>Email :</strong> {customer?.email || "Non renseigné"}</p>
-            <p><strong>Adresse :</strong> {customer?.address || "Non renseignée"}</p>
-            <p><strong>Type de client :</strong> {customer?.type}</p>
-
-            {editMode ? (
-              <div className="edit-form">
-                <input 
-                  type="text" 
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)} 
-                  className="form-control mb-2" 
-                />
-                <input 
-                  type="text" 
-                  value={customer.email || ""} 
-                  onChange={(e) => setCustomer({ ...customer, email: e.target.value })} 
-                  className="form-control mb-2" 
-                />
-                <input 
-                  type="text" 
-                  value={customer.address || ""} 
-                  onChange={(e) => setCustomer({ ...customer, address: e.target.value })} 
-                  className="form-control mb-2" 
-                />
-                <div className="button-group">
-                  <button className="btn-save" onClick={handleUpdateProfile}>💾 Sauvegarder</button>
-                  <button className="btn-cancel" onClick={() => setEditMode(false)}>❌ Annuler</button>
+            {user?.customer && (
+              <>
+                <div style={{
+                  backgroundColor: 'var(--background)',
+                  padding: '1rem',
+                  borderRadius: '8px'
+                }}>
+                  <p style={{ margin: '0' }}>
+                    <strong style={{ color: 'var(--primary-dark)' }}>Email:</strong>
+                    <span style={{ marginLeft: '0.5rem' }}>{customer?.email || "Non renseigné"}</span>
+                  </p>
                 </div>
-              </div>
-            ) : (
-              <div className="button-group">
-                <button className="btn-edit" onClick={() => setEditMode(true)}>✏️ Modifier</button>
-              </div>
-            )}
 
-            {customer?.type === "COMPANY" && (
-              <button className="btn-manage" onClick={() => navigate("/subsidiaries")}>
-                🏢 Gérer les filiales
-              </button>
-            )}
-          </>
-        ) : (
-          <p>Pas d'informations client (vous êtes un ADMIN).</p>
-        )}
+                <div style={{
+                  backgroundColor: 'var(--background)',
+                  padding: '1rem',
+                  borderRadius: '8px'
+                }}>
+                  <p style={{ margin: '0' }}>
+                    <strong style={{ color: 'var(--primary-dark)' }}>Adresse:</strong>
+                    <span style={{ marginLeft: '0.5rem' }}>{customer?.address || "Non renseignée"}</span>
+                  </p>
+                </div>
 
-        <div className="button-group">
-          <button className="btn-logout" onClick={handleLogout}>Se déconnecter</button>
-          <button className="btn-catalog" onClick={() => navigate("/catalog")}>🚗 Aller au Catalogue</button>
+                <div style={{
+                  backgroundColor: 'var(--background)',
+                  padding: '1rem',
+                  borderRadius: '8px'
+                }}>
+                  <p style={{ margin: '0' }}>
+                    <strong style={{ color: 'var(--primary-dark)' }}>Type:</strong>
+                    <span style={{ 
+                      backgroundColor: 'var(--primary-light)',
+                      color: 'white',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '12px',
+                      marginLeft: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}>{customer?.type}</span>
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+
+          {user?.customer && editMode ? (
+            <div style={{
+              display: 'grid',
+              gap: '1rem',
+              backgroundColor: 'var(--background)',
+              padding: '1.5rem',
+              borderRadius: '12px'
+            }}>
+              <input 
+                type="text" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)}
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  width: '100%'
+                }}
+                placeholder="Votre nom"
+              />
+              <input 
+                type="email" 
+                value={customer.email || ""} 
+                onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  width: '100%'
+                }}
+                placeholder="Votre email"
+              />
+              <input 
+                type="text" 
+                value={customer.address || ""} 
+                onChange={(e) => setCustomer({ ...customer, address: e.target.value })}
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '2px solid var(--border)',
+                  width: '100%'
+                }}
+                placeholder="Votre adresse"
+              />
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button 
+                  onClick={handleUpdateProfile}
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem',
+                    backgroundColor: 'var(--success)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold'
+                  }}
+                >💾 Sauvegarder</button>
+                <button 
+                  onClick={() => setEditMode(false)}
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem',
+                    backgroundColor: 'var(--error)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold'
+                  }}
+                >❌ Annuler</button>
+              </div>
+            </div>
+          ) : user?.customer && (
+            <button 
+              onClick={() => setEditMode(true)}
+              style={{
+                padding: '0.75rem',
+                backgroundColor: 'var(--primary-main)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                width: 'fit-content'
+              }}
+            >✏️ Modifier mon profil</button>
+          )}
+
+          {customer?.type === "COMPANY" && (
+            <button 
+              onClick={() => navigate("/subsidiaries")}
+              style={{
+                padding: '0.75rem',
+                backgroundColor: 'var(--primary-light)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+            >🏢 Gérer les filiales</button>
+          )}
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gap: '1rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          marginTop: '2rem',
+          borderTop: '2px solid var(--border)',
+          paddingTop: '2rem'
+        }}>
+          <button 
+            onClick={() => navigate("/catalog")}
+            style={{
+              padding: '1rem',
+              backgroundColor: 'var(--primary-dark)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+          >🚗 Catalogue</button>
+
+          {user.role === "USER" && (
+            <button 
+              onClick={() => navigate("/my-orders")}
+              style={{
+                padding: '1rem',
+                backgroundColor: 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem'
+              }}
+            >📦 Mes Commandes</button>
+          )}
+
           {user.role === "ADMIN" && (
             <>
-              <button className="btn-manage-customers" onClick={() => navigate("/admin/customers")}>📋 Gérer les Clients</button>
-              <button className="btn-manage-options" onClick={() => navigate("/admin/options")}>⚙️ Gérer les options</button>
+              <button 
+                onClick={() => navigate("/admin/customers")}
+                style={{
+                  padding: '1rem',
+                  backgroundColor: 'var(--primary-main)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >👥 Gérer les Clients</button>
+
+              <button 
+                onClick={() => navigate("/admin/options")}
+                style={{
+                  padding: '1rem',
+                  backgroundColor: 'var(--primary-main)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >⚙️ Gérer les Options</button>
+
+              <button 
+                onClick={() => navigate("/admin/orders")}
+                style={{
+                  padding: '1rem',
+                  backgroundColor: 'var(--primary-main)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >📋 Gérer les Commandes</button>
             </>
           )}
-          {user.role === "USER" && (
-            <button className="btn-orders" onClick={() => navigate("/my-orders")}>📦 Mes Commandes</button>
-          )}
-          {user.role === "ADMIN" && (
-            <button className="btn-manage-orders" onClick={() => navigate("/admin/orders")}>📋 Gérer les commandes</button>
-          )}
+
+          <button 
+            onClick={handleLogout}
+            style={{
+              padding: '1rem',
+              backgroundColor: 'var(--error)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+          >🚪 Se déconnecter</button>
         </div>
       </div>
     </div>

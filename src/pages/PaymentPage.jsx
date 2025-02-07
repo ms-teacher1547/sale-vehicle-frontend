@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import "../styles/PaymentPage.css"; // Ajout d'un fichier CSS pour la mise en page
+import "../styles/theme.css";
 
 const API_URL = "http://localhost:8081/api/payments";
 
@@ -80,27 +80,126 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="payment-container">
-      <h2>💳 Paiement de la Commande #{orderId}</h2>
-
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      <div className="form-group">
-        <label>Type de Paiement :</label>
-        <select className="form-control" value={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
-          <option value="COMPTANT">Comptant</option>
-          <option value="CREDIT">Crédit</option>
-        </select>
+    <div className="container" style={{ padding: '2rem', backgroundColor: 'var(--background)' }}>
+      <div style={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        padding: '5rem 1rem', 
+        marginBottom: '2rem',
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <h2 style={{ 
+          color: 'var(--surface)', 
+          marginBottom: '1rem', 
+          textAlign: 'center', 
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          letterSpacing: '2px'
+        }}>💳 Paiement</h2>
+        <p style={{ 
+          color: 'var(--accent)', 
+          textAlign: 'center',
+          fontSize: '1.1rem',
+          marginBottom: '0'
+        }}>Commande #{orderId}</p>
       </div>
 
-      <div className="form-group">
-        <label>Pays :</label>
-        <input type="text" className="form-control" value={country} onChange={(e) => setCountry(e.target.value)} />
-      </div>
+      {error && (
+        <div style={{
+          backgroundColor: 'var(--error)',
+          color: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          marginBottom: '1rem'
+        }}>{error}</div>
+      )}
 
-      <button className="btn btn-pay" onClick={handlePayment} disabled={loading}>
-        {loading ? "⌛ Traitement..." : "💳 Payer"}
-      </button>
+      <div style={{ 
+        maxWidth: '600px', 
+        margin: '0 auto',
+        backgroundColor: 'var(--surface)',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{ 
+            color: 'var(--primary-dark)', 
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            display: 'block',
+            marginBottom: '0.5rem'
+          }}>Type de Paiement</label>
+          <select 
+            style={{ 
+              padding: '1rem',
+              border: '2px solid var(--border)',
+              borderRadius: '8px',
+              width: '100%',
+              backgroundColor: 'var(--background)',
+              color: 'var(--text-primary)',
+              fontSize: '1rem',
+              transition: 'border-color 0.3s ease'
+            }} 
+            value={paymentType} 
+            onChange={(e) => setPaymentType(e.target.value)}>
+            <option value="COMPTANT">💵 Paiement Comptant</option>
+            <option value="CREDIT">💳 Paiement Crédit</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{ 
+            color: 'var(--primary-dark)', 
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+            display: 'block',
+            marginBottom: '0.5rem'
+          }}>Pays de Facturation</label>
+          <input 
+            type="text" 
+            style={{ 
+              padding: '1rem',
+              border: '2px solid var(--border)',
+              borderRadius: '8px',
+              width: '100%',
+              backgroundColor: 'var(--background)',
+              color: 'var(--text-primary)',
+              fontSize: '1rem',
+              transition: 'border-color 0.3s ease'
+            }} 
+            value={country} 
+            onChange={(e) => setCountry(e.target.value)} 
+            placeholder="Entrez votre pays"
+          />
+        </div>
+
+        <button 
+          className="btn-primary" 
+          style={{ 
+            width: '100%', 
+            padding: '1.25rem',
+            marginTop: '1rem',
+            backgroundColor: loading ? 'var(--primary-light)' : 'var(--primary-dark)',
+            border: 'none',
+            borderRadius: '8px',
+            color: 'white',
+            fontSize: '1.1rem',
+            fontWeight: 'bold',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem'
+          }} 
+          onClick={handlePayment} 
+          disabled={loading}>
+          <span>{loading ? '⌛' : '💳'}</span>
+          <span>{loading ? 'Traitement en cours...' : 'Procéder au Paiement'}</span>
+        </button>
+      </div>
     </div>
   );
 };
