@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { FaCar, FaShieldAlt, FaHandshake, FaSearch, FaArrowRight } from 'react-icons/fa';
+import "../styles/HomePage.css";
 
 const Feature = ({ icon: Icon, title, description }) => (
   <motion.div
@@ -11,7 +12,7 @@ const Feature = ({ icon: Icon, title, description }) => (
     transition={{ duration: 0.5 }}
     style={{
       backgroundColor: 'var(--surface)',
-      padding: '2rem',
+      padding: '0rem',
       borderRadius: '12px',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
       display: 'flex',
@@ -23,7 +24,7 @@ const Feature = ({ icon: Icon, title, description }) => (
   >
     <div style={{
       backgroundColor: 'var(--primary-light)',
-      padding: '1rem',
+      padding: '0rem',
       borderRadius: '50%',
       display: 'flex',
       alignItems: 'center',
@@ -58,14 +59,13 @@ const HomePage = () => {
   ];
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div className="home-container" style={{ minHeight: '100vh' }}>
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
         style={{
-          background: 'linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-main) 100%)',
           padding: '8rem 2rem',
           color: 'white',
           textAlign: 'center',
