@@ -293,8 +293,6 @@ const AdminCatalog = () => {
           className="form-control mb-2">
           <option value="essence">Essence</option>
           <option value="electric">Électrique</option>
-
-          <option value="diesel">Diesel</option>
         </select>
 
         {/* <input type="text" name="fuelType" placeholder="Carburant (Essence/Diesel)/ electric" value={newVehicle.fuelType} onChange={handleInputChange} className="form-control mb-2" />
