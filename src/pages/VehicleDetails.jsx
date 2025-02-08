@@ -161,8 +161,8 @@ const VehicleDetails = () => {
           }}>
             {vehicle.imageUrl ? (
               <img
-                src={vehicle.imageUrl}
-                alt={vehicle.name}
+              src={`http://localhost:8081/uploads/vehicles/${vehicle.imageUrl.split('/').pop()}`} 
+              alt={vehicle.name}
                 style={{
                   width: "100%",
                   height: "100%",

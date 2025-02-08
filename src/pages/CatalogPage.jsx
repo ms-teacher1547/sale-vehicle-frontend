@@ -265,7 +265,7 @@ const CatalogPage = () => {
                 }
               }}>
                 <img 
-                  src={vehicle.image} 
+                  src={`http://localhost:8081/uploads/vehicles/${vehicle.imageUrl.split('/').pop()}`} 
                   alt={vehicle.name} 
                   style={{
                     width: '100%',
