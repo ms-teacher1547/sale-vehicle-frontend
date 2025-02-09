@@ -39,6 +39,9 @@ const AdminCatalog = () => {
     hasStorageBox: false,
   });
 
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
   const [vehicleToDelete, setVehicleToDelete] = useState(null);
 
@@ -129,27 +132,58 @@ const AdminCatalog = () => {
     setNewVehicle({ ...newVehicle, hasStorageBox: e.target.checked });
   };
 
-  const addVehicle = () => {
-    const vehicleData = {
-      name: newVehicle.name,
-      price: Number(newVehicle.price),
-      stockQuantity: Number(newVehicle.stockQuantity),
-      yearOfManufacture: Number(newVehicle.yearOfManufacture),
-      fuelType: newVehicle.fuelType,
-      mileage: Number(newVehicle.mileage),
-      ...(vehicleType === "car" ? { numberOfDoors: Number(newVehicle.numberOfDoors) } : { hasStorageBox: newVehicle.hasStorageBox }),
-    };
-
-    axios.post(`${API_URL}/${vehicleType}`, vehicleData, {
-      withCredentials: true,
-    })
-    .then(response => {
-      setVehicles([...vehicles, response.data]);
-      resetForm();
-      alert("✅ Véhicule ajouté avec succès !");
-    })
-    .catch(error => console.error("❌ Erreur lors de l'ajout :", error));
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
+
+
+  const addVehicle = async () => {
+    const formData = new FormData();
+
+    // Convertir l'objet JavaScript en JSON
+    const vehicleJSON = JSON.stringify({
+        name: newVehicle.name,
+        price: Number(newVehicle.price),
+        stockQuantity: Number(newVehicle.stockQuantity),
+        yearOfManufacture: Number(newVehicle.yearOfManufacture),
+        fuelType: newVehicle.fuelType,
+        mileage: Number(newVehicle.mileage),
+        ...(vehicleType === "car"
+            ? { numberOfDoors: Number(newVehicle.numberOfDoors) }
+            : { hasStorageBox: newVehicle.hasStorageBox }),
+    });
+
+    // Ajouter le JSON en tant que blob
+    formData.append("vehicle", new Blob([vehicleJSON], { type: "application/json" }));
+
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
+
+    // ✅ Vérifier les données envoyées
+    for (let pair of formData.entries()) {
+        console.log("📤 Clé:", pair[0], "➡️ Valeur:", pair[1]);
+    }
+
+    try {
+        const response = await axios.post(`${API_URL}/${vehicleType}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
+        });
+
+        console.log("✅ Réponse du serveur :", response.data);
+        setVehicles([...vehicles, response.data]);
+        resetForm();
+        alert("✅ Véhicule ajouté avec succès !");
+    } catch (error) {
+        console.error("❌ Erreur lors de l'ajout :", error.response ? error.response.data : error);
+    }
+  };
+
 
   const resetForm = () => {
     setNewVehicle({
@@ -162,6 +196,8 @@ const AdminCatalog = () => {
       numberOfDoors: "",
       hasStorageBox: false,
     });
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const confirmDelete = (vehicle) => {
@@ -310,6 +346,10 @@ const AdminCatalog = () => {
             <label className="form-check-label">Top case (coffre de rangement)</label>
           </div>
         )}
+
+        {/* ✅ Sélection d'image */}
+        <input type="file" accept="image/*" onChange={handleImageChange} className="form-control mb-2" />
+        {imagePreview && <img src={imagePreview} alt="Aperçu" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", marginBottom: "10px" }} />}
 
         <button 
           className="btn btn-success mt-3" 
