@@ -62,6 +62,7 @@ const AppRoutes = () => {
         <Route path="/subsidiaries" element={<SubsidiaryManagement />} />
         <Route path="/admin/customers" element={<AdminCustomers />} />
         <Route path="/:companyId/subsidiaries" element={<SubsidiaryManagement />} />
+        <Route path="/admin/customers/:customerId/subsidiaries" element={<SubsidiaryManagement />} />
         <Route path="/admin/options" element={<AdminOptions />} />
         <Route path="/choose-options" element={<ChooseOptions />} />
         <Route path="/my-orders" element={<MyOrders />} />

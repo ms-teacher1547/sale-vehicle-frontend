@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import '../styles/SubsidiaryManagement.css'; // Ajoutez votre CSS ici
@@ -9,31 +9,77 @@ const API_URL = "http://localhost:8081/api/customers";
 const SubsidiaryManagement = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { customerId } = useParams(); // Récupérer l'ID du client depuis l'URL
 
   const [subsidiaries, setSubsidiaries] = useState([]);
   const [newSubsidiary, setNewSubsidiary] = useState({ name: "", email: "", address: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // // Logs de débogage
+  // console.log("🔍 SubsidiaryManagement - User Object:", user);
+  // console.log("🔍 SubsidiaryManagement - Customer Details:", user?.customer);
+  // console.log("🔍 SubsidiaryManagement - Customer Type:", user?.customer?.type);
+  // console.log("🔍 SubsidiaryManagement - Customer ID from URL:", customerId);
+
   const fetchSubsidiaries = useCallback(async () => {
-    if (!user || !user.customer || user.customer.type !== "COMPANY") {
+    // console.log("🔍 Début de fetchSubsidiaries");
+    // console.log("🔍 Détails utilisateur complets :", JSON.stringify(user, null, 2));
+    // console.log("🔍 ID du client depuis l'URL :", customerId);
+
+    // Vérification plus flexible pour l'accès, en tenant compte du rôle admin
+    if (!user) {
+      console.error("❌ Aucun utilisateur connecté");
+      setError("Utilisateur non authentifié");
+      return;
+    }
+
+    if (!user.customer && user.role !== "ADMIN") {
+      console.error("❌ Accès non autorisé - Ni client, ni admin");
+      setError("Vous n'avez pas les permissions nécessaires");
       return;
     }
 
     try {
-      const response = await axios.get(`${API_URL}/${user.customer.id}/subsidiaries`, { withCredentials: true });
+      // Pour les admins, utiliser l'ID du client de l'URL
+      const targetCustomerId = customerId || (user.customer ? user.customer.id : null);
+      
+      console.log("🔍 ID du client cible :", targetCustomerId);
+      
+      if (!targetCustomerId) {
+        console.error("❌ Aucun ID de client disponible");
+        setError("Impossible de récupérer les filiales - ID client manquant");
+        return;
+      }
+
+      console.log(`🔍 Tentative de récupération des filiales pour l'ID : ${targetCustomerId}`);
+      
+      const response = await axios.get(`${API_URL}/${targetCustomerId}/subsidiaries`, { 
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        }
+      });
+
+      console.log("🔍 Réponse de l'API :", JSON.stringify(response.data, null, 2));
+      
       setSubsidiaries(response.data);
       setError("");
     } catch (error) {
-      console.error("❌ Erreur lors du chargement des filiales :", error);
-      setError("Impossible de charger les filiales.");
+      console.error("❌ Erreur détaillée lors du chargement des filiales :", error);
+      console.error("❌ Détails de l'erreur :", JSON.stringify(error.response?.data || error.message, null, 2));
+      
+      setError(error.response?.data?.message || "Impossible de charger les filiales");
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, customerId]);
 
   useEffect(() => {
-    if (!user || !user.customer || user.customer.type !== "COMPANY") {
+    // Vérification plus flexible pour l'accès à la page, en tenant compte du rôle admin
+    if (!user || (!user.customer && user.role !== "ADMIN")) {
+      console.log("❌ Redirecting from SubsidiaryManagement due to insufficient permissions");
       navigate("/profile");
       return;
     }
@@ -47,8 +93,17 @@ const SubsidiaryManagement = () => {
     }
 
     try {
+      // Pour les admins, utiliser l'ID du client de l'URL
+      const targetCustomerId = customerId || (user.customer ? user.customer.id : null);
+      
+      if (!targetCustomerId) {
+        console.error("❌ Aucun ID de client disponible");
+        setError("Impossible d'ajouter une filiale");
+        return;
+      }
+
       const response = await axios.post(
-        `${API_URL}/${user.customer.id}/subsidiaries`,
+        `${API_URL}/${targetCustomerId}/subsidiaries`,
         newSubsidiary,
         { withCredentials: true }
       );
