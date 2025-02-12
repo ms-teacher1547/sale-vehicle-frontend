@@ -131,6 +131,23 @@ const Navbar = () => {
               >
                 <FaBox /> Mes factures
               </Link>
+              {user?.customer?.type === "COMPANY" && (
+                <Link 
+                  to={`/fleet-proposal/${user.customer.id}`}
+                  style={{
+                    color: location.pathname === `/fleet-proposal/${user.customer.id}` ? 'var(--accent)' : 'var(--surface)',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: location.pathname === `/fleet-proposal/${user.customer.id}` ? 'bold' : 'normal',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <FaBox /> Propositions de Flotte
+                </Link>
+              )}
             </>
           )}
 
@@ -196,6 +213,21 @@ const Navbar = () => {
                 }}
               >
                 <FaCogs /> Gérer les options
+              </Link>
+              <Link 
+                to="/admin/fleet-proposals"
+                style={{
+                  color: location.pathname === '/admin/fleet-proposals' ? 'var(--accent)' : 'var(--surface)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: location.pathname === '/admin/fleet-proposals' ? 'bold' : 'normal',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FaBox /> Propositions de Flotte
               </Link>
             </>
           )}

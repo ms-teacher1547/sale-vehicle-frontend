@@ -1,0 +1,87 @@
+.fleet-proposal {
+    padding: 40px;
+    background: linear-gradient(to right, #3498db, #2ecc71);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.proposal-title, .company-details-title, .vehicles-title {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.proposal-details {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #ecf0f1;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.proposal-details:hover {
+    transform: scale(1.02);
+}
+
+.vehicle-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.vehicle-list li {
+    background: #bdc3c7;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: calc(30% - 30px);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.vehicle-list li:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.vehicle-list li img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.vehicle-modal {
+    background: #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 80%;
+    margin: 40px auto;
+}
+
+.company-icon {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+@media only screen and (max-width: 768px) {
+    .vehicle-list li {
+        width: calc(50% - 30px);
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .vehicle-list li {
+        width: 100%;
+    }
+}

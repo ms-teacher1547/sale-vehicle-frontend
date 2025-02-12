@@ -11,6 +11,8 @@ import SubsidiaryManagement from "./pages/SubsidiaryManagement";
 import AdminCustomers from "./pages/AdminCustomers";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import FleetProposalPage from "./pages/FleetProposalPage";
+import AdminFleetProposalPage from "./pages/AdminFleetProposalPage";
 import Footer from "./components/Footer";
 import AdminOptions from "./pages/AdminOptions";
 import ChooseOptions from "./pages/ChooseOptions";
@@ -40,6 +42,7 @@ const AppRoutes = () => {
     "/catalog",
     "/vehicle/:id",
     "/:companyId/subsidiaries",
+    "/fleet-proposal/:companyId",
   ];
 
   // Vérification si la page actuelle est dans la liste des pages sans footer
@@ -69,6 +72,8 @@ const AppRoutes = () => {
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/payment/:orderId" element={<PaymentPage />} />
         <Route path="/my-invoices" element={<MyInvoices />} />
+        <Route path="/fleet-proposal/:companyId" element={<FleetProposalPage />} />
+        <Route path="/admin/fleet-proposals" element={<AdminFleetProposalPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

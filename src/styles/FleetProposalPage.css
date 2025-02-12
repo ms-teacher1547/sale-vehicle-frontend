@@ -1,0 +1,52 @@
+.fleet-proposal-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.vehicle-selection {
+    margin-bottom: 30px;
+}
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.vehicle-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vehicle-card:hover {
+    background-color: #f0f0f0;
+}
+
+.vehicle-card.selected {
+    border-color: green;
+    background-color: #e6f3e6;
+}
+
+.proposals-list {
+    margin-top: 30px;
+}
+
+.proposal-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+button {
+    margin-right: 10px;
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
