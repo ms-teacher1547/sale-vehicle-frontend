@@ -100,47 +100,94 @@ const CartPage = () => {
   const EmptyCart = () => (
     <div style={{
       backgroundColor: 'var(--surface)',
-      padding: '2rem',
-      borderRadius: '12px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      padding: '3rem',
+      borderRadius: '16px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
       textAlign: 'center',
       margin: '2rem auto',
-      maxWidth: '600px'
+      maxWidth: '600px',
+      border: '1px solid var(--border)'
     }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <span style={{ fontSize: '4rem' }}>🛒</span>
+      <div style={{ marginBottom: '2rem' }}>
+        <span role="img" aria-label="empty cart" style={{ fontSize: '5rem' }}>🛒</span>
       </div>
       <h3 style={{ 
-        color: 'var(--primary-dark)',
+        color: 'var(--text-primary)',
         marginBottom: '1rem',
-        fontSize: '1.5rem',
+        fontSize: '1.8rem',
         fontWeight: 'bold'
       }}>Votre panier est vide</h3>
       <p style={{ 
         color: 'var(--text-secondary)',
-        marginBottom: '1.5rem'
-      }}>Ajoutez des articles à votre panier pour commencer.</p>
+        marginBottom: '2rem',
+        fontSize: '1.1rem',
+        lineHeight: '1.6'
+      }}>Découvrez notre sélection de véhicules et commencez à configurer votre commande.</p>
       <button 
         onClick={() => navigate('/catalog')}
         style={{
           backgroundColor: 'var(--primary-main)',
           color: 'white',
           border: 'none',
-          padding: '0.75rem 1.5rem',
-          borderRadius: '8px',
-          cursor: 'pointer',
+          padding: '1rem 2rem',
+          borderRadius: '12px',
+          fontSize: '1.1rem',
           fontWeight: 'bold',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.5rem'
+          gap: '0.75rem',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          '&:hover': {
+            backgroundColor: 'var(--primary-dark)',
+            transform: 'translateY(-2px)'
+          }
         }}
       >
-        🚗 Voir le catalogue
+        <span>Voir le catalogue</span>
+        <span style={{ fontSize: '1.25rem' }}>🚗</span>
       </button>
     </div>
   );
 
-  if (!cart) return <EmptyCart />;
+  if (!cart) return (
+    <div style={{
+      backgroundColor: 'var(--background)',
+      minHeight: '100vh',
+      padding: '2rem'
+    }}>
+      <div style={{ 
+        backgroundColor: 'var(--primary-dark)', 
+        padding: '5rem 2rem', 
+        marginBottom: '3rem',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%)',
+          zIndex: 1
+        }}/>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ 
+            color: 'var(--surface)', 
+            marginBottom: '1rem',
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          }}>Mon Panier</h2>
+        </div>
+      </div>
+      <EmptyCart />
+    </div>
+  );
 
   const totalPrice = cart.items.reduce((total, item) => {
     const optionsPrice = item.options.reduce((sum, option) => sum + option.price, 0);
@@ -151,219 +198,299 @@ const CartPage = () => {
     <div style={{
       backgroundColor: 'var(--background)',
       minHeight: '100vh',
-      padding: '2rem'
+      position: 'relative',
+      paddingBottom: '4rem'
     }}>
       <div style={{ 
         backgroundColor: 'var(--primary-dark)', 
-        padding: '5rem 1rem', 
-        marginBottom: '2rem',
-        borderRadius: '0 0 20px 20px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        padding: '5rem 2rem', 
+        marginBottom: '3rem',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <h2 style={{ 
-          color: 'var(--surface)', 
-          marginBottom: '0', 
-          textAlign: 'center', 
-          fontSize: '2.5rem',
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-          letterSpacing: '2px'
-        }}>🛒 Mon Panier</h2>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%)',
+          zIndex: 1
+        }}/>
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ 
+            color: 'var(--surface)', 
+            marginBottom: '1rem',
+            fontSize: '3rem',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          }}>Mon Panier</h2>
+          <p style={{ 
+            color: 'white', 
+            fontSize: '1.2rem',
+            opacity: 0.9,
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}>{cart.items.length} article(s) dans votre panier</p>
+        </div>
       </div>
 
-      {error && (
-        <div style={{
-          backgroundColor: 'var(--error)',
-          color: 'white',
-          padding: '1rem',
-          borderRadius: '8px',
-          marginBottom: '1.5rem',
-          textAlign: 'center'
-        }}>
-          {error}
-        </div>
-      )}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        {error && (
+          <div style={{
+            backgroundColor: 'var(--error-light)',
+            color: 'var(--error)',
+            padding: '1rem 1.5rem',
+            borderRadius: '12px',
+            marginBottom: '2rem',
+            border: '1px solid var(--error)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
+            <span style={{ fontSize: '1.5rem' }}>⚠️</span>
+            <p style={{ margin: 0, fontWeight: 500 }}>{error}</p>
+          </div>
+        )}
 
-      <div style={{
-        backgroundColor: 'var(--surface)',
-        padding: '2rem',
-        borderRadius: '12px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{ marginBottom: '2rem' }}>
-          {cart.items.map((item) => (
-            <div 
-              key={item.id} 
-              style={{
-                backgroundColor: 'var(--background)',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                marginBottom: '1rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                gap: '1rem'
-              }}
-            >
-              <div style={{ flex: 1 }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '0.5rem'
+        <div style={{ 
+          display: 'grid',
+          gridTemplateColumns: '1fr 350px',
+          gap: '2rem',
+          alignItems: 'start'
+        }}>
+          <div>
+            {cart.items.map((item) => (
+              <div 
+                key={item.id} 
+                style={{
+                  backgroundColor: 'var(--surface)',
+                  borderRadius: '16px',
+                  padding: '1.5rem',
+                  marginBottom: '1.5rem',
+                  border: '1px solid var(--border)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                }}
+              >
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '120px 1fr auto',
+                  gap: '1.5rem',
+                  alignItems: 'center'
                 }}>
-                  <h3 style={{ 
-                    margin: '0',
-                    color: 'var(--primary-dark)',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold'
-                  }}>{item.vehicle.name}</h3>
-                  <span style={{ 
-                    backgroundColor: 'var(--primary-light)',
-                    color: 'white',
-                    padding: '0.25rem 0.75rem',
-                    borderRadius: '12px',
-                    fontSize: '0.9rem'
-                  }}>{item.quantity}x</span>
-                </div>
-                <p style={{ 
-                  margin: '0 0 1rem 0',
-                  color: 'var(--accent)',
-                  fontSize: '1.1rem',
-                  fontWeight: 'bold'
-                }}>{item.vehicle.price.toLocaleString()} FCFA</p>
-                {item.options.length > 0 && (
-                  <div style={{ 
-                    backgroundColor: 'var(--surface)',
-                    padding: '1rem',
-                    borderRadius: '8px'
+                  <div style={{
+                    position: 'relative',
+                    paddingTop: '80px',
+                    backgroundColor: 'var(--background)',
+                    borderRadius: '8px',
+                    overflow: 'hidden'
                   }}>
-                    <p style={{ 
-                      margin: '0 0 0.5rem 0',
-                      color: 'var(--primary-dark)',
-                      fontSize: '0.9rem',
+                    <img 
+                      src={`http://localhost:8081/uploads/vehicles/${item.vehicle.imageUrl.split('/').pop()}`}
+                      alt={item.vehicle.name}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <h4 style={{
+                      fontSize: '1.25rem',
+                      color: 'var(--text-primary)',
+                      marginBottom: '0.5rem',
                       fontWeight: 'bold'
-                    }}>Options sélectionnées:</p>
-                    {item.options.map((option) => (
-                      <div 
-                        key={option.id}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
+                    }}>{item.vehicle.name}</h4>
+                    
+                    {item.options.length > 0 && (
+                      <div style={{ marginTop: '0.75rem' }}>
+                        <p style={{
                           color: 'var(--text-secondary)',
-                          fontSize: '0.9rem',
-                          marginBottom: '0.25rem'
+                          fontSize: '0.875rem',
+                          marginBottom: '0.5rem'
+                        }}>Options sélectionnées:</p>
+                        <div style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: '0.5rem'
+                        }}>
+                          {item.options.map(option => (
+                            <span
+                              key={option.id}
+                              style={{
+                                backgroundColor: 'var(--primary-light)',
+                                color: 'var(--primary-dark)',
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '16px',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                              }}
+                            >
+                              {option.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{
+                      fontSize: '1.25rem',
+                      color: 'var(--primary-main)',
+                      fontWeight: 'bold',
+                      marginBottom: '0.5rem'
+                    }}>
+                      {((item.vehicle.price + item.options.reduce((sum, opt) => sum + opt.price, 0)) * item.quantity).toLocaleString()} €
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      justifyContent: 'flex-end'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        backgroundColor: 'var(--background)',
+                        padding: '0.25rem',
+                        borderRadius: '8px'
+                      }}>
+                        <span style={{
+                          color: 'var(--text-secondary)',
+                          fontSize: '0.875rem'
+                        }}>Qté: {item.quantity}</span>
+                      </div>
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        style={{
+                          backgroundColor: 'var(--error-light)',
+                          color: 'var(--error)',
+                          border: 'none',
+                          padding: '0.5rem',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.3s ease'
                         }}
                       >
-                        <span>{option.name}</span>
-                        <span>{option.price.toLocaleString()} FCFA</span>
-                      </div>
-                    ))}
+                        <span role="img" aria-label="remove" style={{ fontSize: '1.25rem' }}>🗑️</span>
+                      </button>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
-              <button 
-                onClick={() => removeFromCart(item.id)}
+            ))}
+          </div>
+
+          <div style={{
+            backgroundColor: 'var(--surface)',
+            borderRadius: '16px',
+            padding: '2rem',
+            position: 'sticky',
+            top: '2rem',
+            border: '1px solid var(--border)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              color: 'var(--text-primary)',
+              marginBottom: '1.5rem',
+              fontWeight: 'bold'
+            }}>Récapitulatif</h3>
+
+            <div style={{
+              borderTop: '1px solid var(--border)',
+              paddingTop: '1.5rem',
+              marginTop: '1.5rem'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '2rem'
+              }}>
+                <span style={{
+                  fontSize: '1.1rem',
+                  color: 'var(--text-primary)',
+                  fontWeight: 'bold'
+                }}>Total</span>
+                <span style={{
+                  fontSize: '1.5rem',
+                  color: 'var(--primary-main)',
+                  fontWeight: 'bold'
+                }}>{totalPrice.toLocaleString()} €</span>
+              </div>
+
+              <button
+                onClick={placeOrder}
+                disabled={loading}
                 style={{
-                  backgroundColor: 'var(--error)',
+                  backgroundColor: 'var(--primary-main)',
                   color: 'white',
                   border: 'none',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
+                  padding: '1rem',
+                  borderRadius: '12px',
+                  width: '100%',
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.7 : 1,
+                  transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  flexShrink: 0
+                  gap: '0.75rem',
+                  marginBottom: '1rem',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                 }}
               >
-                ❌
+                {loading ? (
+                  <span>Traitement en cours...</span>
+                ) : (
+                  <>
+                    <span>Passer la commande</span>
+                    <span style={{ fontSize: '1.25rem' }}>✨</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={clearCart}
+                disabled={loading}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'var(--error)',
+                  border: '1px solid var(--error)',
+                  padding: '0.75rem',
+                  borderRadius: '12px',
+                  width: '100%',
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  opacity: loading ? 0.7 : 1,
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                <span>Vider le panier</span>
+                <span role="img" aria-label="clear cart" style={{ fontSize: '1.1rem' }}>🗑️</span>
               </button>
             </div>
-          ))}
-        </div>
-
-        <div style={{
-          borderTop: '2px solid var(--border)',
-          paddingTop: '1.5rem',
-          marginBottom: '2rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <span style={{ 
-              fontSize: '1.2rem',
-              fontWeight: 'bold',
-              color: 'var(--primary-dark)'
-            }}>Total</span>
-            <span style={{ 
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-              color: 'var(--accent)'
-            }}>{totalPrice.toLocaleString()} FCFA</span>
           </div>
-        </div>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: '1rem'
-        }}>
-          <button 
-            onClick={clearCart}
-            style={{
-              backgroundColor: 'var(--error)',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >🗑️ Vider le panier</button>
-          <button 
-            onClick={() => navigate("/choose-options")}
-            style={{
-              backgroundColor: 'var(--primary-light)',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >🔙 Retour</button>
-          <button 
-            onClick={placeOrder} 
-            disabled={loading}
-            style={{
-              backgroundColor: loading ? 'var(--border)' : 'var(--success)',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem',
-              borderRadius: '8px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >
-            {loading ? "⌛ Traitement..." : "🛍️ Passer la commande"}
-          </button>
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ const AdminCustomers = () => {
     <div style={{ 
       backgroundColor: 'var(--background)', 
       minHeight: '100vh',
-      padding: '5rem'
+      padding: '4rem'
     }}>
       <div style={{ 
         backgroundColor: 'var(--primary-dark)', 

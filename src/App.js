@@ -43,6 +43,7 @@ const AppRoutes = () => {
     "/vehicle/:id",
     "/:companyId/subsidiaries",
     "/fleet-proposal/:companyId",
+    "/admin/fleet-proposals",
   ];
 
   // Vérification si la page actuelle est dans la liste des pages sans footer

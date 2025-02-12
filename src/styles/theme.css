@@ -22,6 +22,12 @@
   --font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   --heading-weight: 600;
   --body-weight: 400;
+
+  /* New layout variables */
+  --container-padding: 1.5rem;
+  --border-radius-lg: 1rem;
+  --border-radius-md: 0.75rem;
+  --elevation-medium: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* Global Styles */
@@ -119,4 +125,22 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   padding: 1.5rem 0;
+}
+
+/* New styles for components */
+.hero-section {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.feature-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.search-input {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  border: 2px solid var(--primary-light);
 }

@@ -166,7 +166,7 @@ const AdminFleetProposalPage = () => {
             <Fade in={true} timeout={1000}>
                 <Box 
                     sx={{ 
-                        background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
+                        background: '#0B2447',
                         color: 'white',
                         padding: '40px 20px',
                         marginBottom: '30px',
@@ -212,7 +212,7 @@ const AdminFleetProposalPage = () => {
                 <Paper 
                     elevation={2} 
                     sx={{ 
-                        backgroundColor: '#ffebee', 
+                        backgroundColor: '#19376D', 
                         color: '#d32f2f', 
                         padding: '15px', 
                         marginBottom: '20px',
@@ -240,7 +240,7 @@ const AdminFleetProposalPage = () => {
                         >
                             <Box 
                                 sx={{ 
-                                    backgroundColor: '#1a73e8', 
+                                    backgroundColor: '#19376D', 
                                     color: 'white', 
                                     padding: '15px',
                                     display: 'flex',
@@ -301,7 +301,7 @@ const AdminFleetProposalPage = () => {
                     >
                         <Box 
                             sx={{ 
-                                backgroundColor: '#1a73e8', 
+                                backgroundColor: '#19376D', 
                                 color: 'white', 
                                 padding: '15px',
                                 display: 'flex',

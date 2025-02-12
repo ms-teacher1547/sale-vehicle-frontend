@@ -45,6 +45,9 @@ const AdminCatalog = () => {
   const [showModal, setShowModal] = useState(false);
   const [vehicleToDelete, setVehicleToDelete] = useState(null);
 
+  const [editingVehicle, setEditingVehicle] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   useEffect(() => {
     fetchVehicles();
   }, []);
@@ -140,7 +143,6 @@ const AdminCatalog = () => {
     }
   };
 
-
   const addVehicle = async () => {
     const formData = new FormData();
 
@@ -184,7 +186,6 @@ const AdminCatalog = () => {
     }
   };
 
-
   const resetForm = () => {
     setNewVehicle({
       name: "",
@@ -219,293 +220,425 @@ const AdminCatalog = () => {
     .catch(error => console.error("❌ Erreur lors de la suppression :", error));
   };
 
+  const handleEdit = (vehicle) => {
+    console.log("Vehicle to edit:", vehicle);  // Debug log
+    // Determine the vehicle type based on the presence of type-specific fields
+    const vehicleType = vehicle.numberOfDoors !== undefined ? "CAR" : 
+                       vehicle.hasStorageBox !== undefined ? "SCOOTER" : "CAR"; // Default to CAR if unknown
+    
+    setEditingVehicle({
+      ...vehicle,
+      yearOfManufacture: vehicle.yearOfManufacture || "",
+      fuelType: vehicle.fuelType || "essence",
+      mileage: vehicle.mileage || 0,
+      stockQuantity: vehicle.stockQuantity || 0,
+      vehicle_type: vehicleType,  // Set the vehicle type explicitly
+      numberOfDoors: vehicleType === "CAR" ? (vehicle.numberOfDoors || "") : undefined,
+      hasStorageBox: vehicleType === "SCOOTER" ? (vehicle.hasStorageBox || false) : undefined
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditingVehicle(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleUpdate = async () => {
+    try {
+      // Create the vehicle data with the correct type structure
+      const vehicleData = {
+        id: editingVehicle.id,
+        name: editingVehicle.name,
+        price: Number(editingVehicle.price),
+        stockQuantity: Number(editingVehicle.stockQuantity),
+        yearOfManufacture: Number(editingVehicle.yearOfManufacture),
+        mileage: Number(editingVehicle.mileage),
+        fuelType: editingVehicle.fuelType,
+        animationUrl: editingVehicle.animationUrl,
+        imageUrl: editingVehicle.imageUrl,
+        vehicle_type: "CAR",  // Set this explicitly for cars
+        numberOfDoors: Number(editingVehicle.numberOfDoors || 0)
+      };
+
+      console.log("Données envoyées pour la mise à jour:", vehicleData);
+
+      const response = await axios.put(
+        `${API_URL}/${editingVehicle.id}/update`,
+        vehicleData,
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.data) {
+        setVehicles(vehicles.map(v => 
+          v.id === editingVehicle.id ? response.data : v
+        ));
+        
+        setShowEditModal(false);
+        setEditingVehicle(null);
+        alert("✅ Véhicule mis à jour avec succès !");
+      } else {
+        throw new Error("Pas de données reçues du serveur");
+      }
+    } catch (error) {
+      console.error("❌ Erreur lors de la mise à jour :", error.response?.data || error.message);
+      alert("❌ Erreur lors de la mise à jour du véhicule : " + 
+            (error.response?.data?.message || error.message || "Erreur inconnue"));
+    }
+  };
+
   if (loading) return <Spinner animation="border" role="status" />;
 
   return (
-    <div className="admin-container" style={{ padding: '5rem', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
-      <div className="row mb-4">
-        <div className="col-12">
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '1.5rem',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-            marginBottom: '2rem'
-          }}>
-            <h2 style={{ margin: 0, color: '#2c3e50', fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <FaCar style={{ color: '#3498db' }} /> Gestion des Véhicules
-            </h2>
+    <div className="admin-catalog-container">
+      <div className="admin-header">
+        <h1><FaCar /> Gestion du Catalogue</h1>
+        <div className="header-actions">
+          <button className="premium-button" onClick={() => navigate(-1)}>
+            <FaArrowLeft /> Retour
+          </button>
+          <button className="premium-button success" onClick={applyDiscount}>
+            Appliquer les réductions
+          </button>
+        </div>
+      </div>
 
-            <div>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <button 
-                  className="btn btn-outline-primary" 
-                  onClick={() => navigate("/catalog")}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    transition: 'all 0.3s ease',
-                    fontWeight: '500'
-                  }}
-                >
-                  <FaArrowLeft /> Retour au Catalogue
-                </button>
-                <button 
-                  className="btn btn-warning" 
-                  onClick={applyDiscount}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    transition: 'all 0.3s ease',
-                    fontWeight: '500',
-                    backgroundColor: '#f1c40f',
-                    border: 'none',
-                    color: '#2c3e50'
-                  }}
-                >
-                  💰 Appliquer une réduction (-20%)
-                </button>
+      <div className="admin-filters">
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Rechercher un véhicule..."
+            value={filterConfig.search}
+            onChange={(e) => setFilterConfig({ ...filterConfig, search: e.target.value })}
+          />
+        </div>
+        <div className="filter-group">
+          <select
+            value={filterConfig.fuelType}
+            onChange={(e) => setFilterConfig({ ...filterConfig, fuelType: e.target.value })}
+          >
+            <option value="all">Tous les carburants</option>
+            <option value="essence">Essence</option>
+            <option value="diesel">Diesel</option>
+            <option value="electric">Électrique</option>
+            <option value="hybrid">Hybride</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Année min"
+            value={filterConfig.yearMin}
+            onChange={(e) => setFilterConfig({ ...filterConfig, yearMin: e.target.value })}
+          />
+          <input
+            type="number"
+            placeholder="Année max"
+            value={filterConfig.yearMax}
+            onChange={(e) => setFilterConfig({ ...filterConfig, yearMax: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="admin-content">
+        <div className="add-vehicle-section">
+          <h2>Ajouter un nouveau véhicule</h2>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Type de véhicule</label>
+              <select value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}>
+                <option value="car">Voiture</option>
+                <option value="scooter">Scooter</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Nom</label>
+              <input
+                type="text"
+                name="name"
+                value={newVehicle.name}
+                onChange={handleInputChange}
+                placeholder="Nom du véhicule"
+              />
+            </div>
+            <div className="form-group">
+              <label>Prix</label>
+              <input
+                type="number"
+                name="price"
+                value={newVehicle.price}
+                onChange={handleInputChange}
+                placeholder="Prix"
+              />
+            </div>
+            <div className="form-group">
+              <label>Quantité en stock</label>
+              <input
+                type="number"
+                name="stockQuantity"
+                value={newVehicle.stockQuantity}
+                onChange={handleInputChange}
+                placeholder="Quantité"
+              />
+            </div>
+            <div className="form-group">
+              <label>Année de fabrication</label>
+              <input
+                type="number"
+                name="yearOfManufacture"
+                value={newVehicle.yearOfManufacture}
+                onChange={handleInputChange}
+                placeholder="Année"
+              />
+            </div>
+            <div className="form-group">
+              <label>Type de carburant</label>
+              <select name="fuelType" value={newVehicle.fuelType} onChange={handleInputChange}>
+                <option value="essence">Essence</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Électrique</option>
+                <option value="hybrid">Hybride</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Kilométrage</label>
+              <input
+                type="number"
+                name="mileage"
+                value={newVehicle.mileage}
+                onChange={handleInputChange}
+                placeholder="Kilométrage"
+              />
+            </div>
+            {vehicleType === "car" ? (
+              <div className="form-group">
+                <label>Nombre de portes</label>
+                <input
+                  type="number"
+                  name="numberOfDoors"
+                  value={newVehicle.numberOfDoors}
+                  onChange={handleInputChange}
+                  placeholder="Nombre de portes"
+                />
               </div>
+            ) : (
+              <div className="form-group checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="hasStorageBox"
+                    checked={newVehicle.hasStorageBox}
+                    onChange={handleCheckboxChange}
+                  />
+                  Coffre de rangement
+                </label>
+              </div>
+            )}
+            <div className="form-group image-upload">
+              <label>Image du véhicule</label>
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+              />
+              {imagePreview && (
+                <img src={imagePreview} alt="Aperçu" className="image-preview" />
+              )}
             </div>
           </div>
+          <div className="form-actions">
+            <button className="premium-button" onClick={resetForm}>Réinitialiser</button>
+            <button className="premium-button success" onClick={addVehicle}>
+              <FaSave /> Ajouter le véhicule
+            </button>
+          </div>
+        </div>
+
+        <div className="vehicles-list-section">
+          <h2>Liste des véhicules</h2>
+          {loading ? (
+            <div className="loading-spinner">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Chargement...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <div className="vehicles-grid">
+              {getFilteredAndSortedVehicles().map((vehicle) => (
+                <div key={vehicle.id} className="vehicle-card">
+                  <div className="vehicle-image">
+                    {vehicle.imageUrl ? (
+                      <img src={vehicle.imageUrl} alt={vehicle.name} />
+                    ) : (
+                      <div className="no-image">
+                        <FaCar />
+                        <span>Pas d'image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="vehicle-info">
+                    <h3>{vehicle.name}</h3>
+                    <div className="info-grid">
+                      <span>Prix: {vehicle.price} €</span>
+                      <span>Stock: {vehicle.stockQuantity}</span>
+                      <span>Année: {vehicle.yearOfManufacture}</span>
+                      <span>Carburant: {vehicle.fuelType}</span>
+                    </div>
+                  </div>
+                  <div className="vehicle-actions">
+                    <button className="icon-button edit" onClick={() => handleEdit(vehicle)}>
+                      <FaEdit />
+                    </button>
+                    <button className="icon-button delete" onClick={() => confirmDelete(vehicle)}>
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ✅ Formulaire d'ajout */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem' }}>
-          <FaCar style={{ marginRight: '10px' }} /> Ajouter un véhicule
-        </h4>
-        <select 
-          className="form-control mb-3" 
-          value={vehicleType} 
-          onChange={(e) => setVehicleType(e.target.value)}
-          style={{
-            padding: '0.75rem',
-            borderRadius: '8px',
-            border: '1px solid #e2e8f0',
-            backgroundColor: '#f8f9fa'
-          }}>
-          <option value="car">🚗 Voiture</option>
-          <option value="scooter">🛵 Scooter</option>
-        </select>
-        <input 
-          type="text" 
-          name="name" 
-          placeholder="Nom" 
-          value={newVehicle.name} 
-          onChange={handleInputChange} 
-          className="form-control mb-3" 
-          style={{
-            padding: '0.75rem',
-            borderRadius: '8px',
-            border: '1px solid #e2e8f0'
-          }}
-        />
-        <input type="number" name="price" placeholder="Prix (FCFA)" value={newVehicle.price} onChange={handleInputChange} className="form-control mb-2" />
-        <input type="number" name="stockQuantity" placeholder="Quantité en stock" value={newVehicle.stockQuantity} onChange={handleInputChange} className="form-control mb-2" />
-        <input type="number" name="yearOfManufacture" placeholder="Année" value={newVehicle.yearOfManufacture} onChange={handleInputChange} className="form-control mb-2" />
-        
-        {/* Choix du carburant */}
-        <select 
-          name="fuelType" 
-          value={newVehicle.fuelType} 
-          onChange={handleInputChange} 
-          className="form-control mb-2">
-          <option value="essence">Essence</option>
-          <option value="electric">Électrique</option>
-        </select>
-
-        {/* <input type="text" name="fuelType" placeholder="Carburant (Essence/Diesel)/ electric" value={newVehicle.fuelType} onChange={handleInputChange} className="form-control mb-2" />
-        */}
-        
-        <input type="number" name="mileage" placeholder="Kilométrage" value={newVehicle.mileage} onChange={handleInputChange} className="form-control mb-2" />
-        
-        {vehicleType === "car" && (
-          <input type="number" name="numberOfDoors" placeholder="Nombre de portes" value={newVehicle.numberOfDoors} onChange={handleInputChange} className="form-control mb-2" />
-        )}
-
-        {vehicleType === "scooter" && (
-          <div className="form-check">
-            <input className="form-check-input" type="checkbox" checked={newVehicle.hasStorageBox} onChange={handleCheckboxChange} />
-            <label className="form-check-label">Top case (coffre de rangement)</label>
-          </div>
-        )}
-
-        {/* ✅ Sélection d'image */}
-        <input type="file" accept="image/*" onChange={handleImageChange} className="form-control mb-2" />
-        {imagePreview && <img src={imagePreview} alt="Aperçu" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", marginBottom: "10px" }} />}
-
-        <button 
-          className="btn btn-success mt-3" 
-          onClick={addVehicle}
-          style={{
-            padding: '0.75rem 2rem',
-            borderRadius: '8px',
-            backgroundColor: '#2ecc71',
-            border: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontWeight: '500',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <FaSave /> Ajouter
-        </button>
-      </div>
-
-      {/* ✅ Filtres et recherche */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <FaSearch style={{ color: '#3498db' }} /> Filtres
-        </h4>
-        <div className="row g-3">
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Rechercher..."
-              value={filterConfig.search}
-              onChange={(e) => setFilterConfig({ ...filterConfig, search: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <select
-              className="form-control"
-              value={filterConfig.fuelType}
-              onChange={(e) => setFilterConfig({ ...filterConfig, fuelType: e.target.value })}
-            >
-              <option value="all">Tous les carburants</option>
-              <option value="essence">Essence</option>
-              <option value="electric">Électrique</option>
-              <option value="diesel">Diesel</option>
-            </select>
-          </div>
-          <div className="col-md-3">
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Année min"
-              value={filterConfig.yearMin}
-              onChange={(e) => setFilterConfig({ ...filterConfig, yearMin: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Année max"
-              value={filterConfig.yearMax}
-              onChange={(e) => setFilterConfig({ ...filterConfig, yearMax: e.target.value })}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ✅ Liste des véhicules */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-        <h4 style={{ color: '#2c3e50', marginBottom: '1.5rem', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <FaList style={{ color: '#3498db' }} /> Véhicules existants
-        </h4>
-        <div className="table-responsive">
-          <table className="table table-hover" style={{ marginBottom: 0 }}>
-        <thead style={{ backgroundColor: '#f8f9fa' }}>
-          <tr>
-            <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>
-              Nom {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => requestSort('price')} style={{ cursor: 'pointer' }}>
-              Prix {sortConfig.key === 'price' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => requestSort('yearOfManufacture')} style={{ cursor: 'pointer' }}>
-              Année {sortConfig.key === 'yearOfManufacture' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => requestSort('fuelType')} style={{ cursor: 'pointer' }}>
-              Carburant {sortConfig.key === 'fuelType' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => requestSort('mileage')} style={{ cursor: 'pointer' }}>
-              Kilométrage {sortConfig.key === 'mileage' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th onClick={() => requestSort('stockQuantity')} style={{ cursor: 'pointer' }}>
-              Quantité {sortConfig.key === 'stockQuantity' && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
-            </th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getFilteredAndSortedVehicles().map(vehicle => (
-            <tr key={vehicle.id}>
-              <td>{vehicle.name}</td>
-              <td>{vehicle.price} FCFA</td>
-              <td>{vehicle.yearOfManufacture}</td>
-              <td>{vehicle.fuelType === "essence" ? "Essence" : "Électrique"}</td>
-              <td>{vehicle.mileage} km</td>
-              <td>{vehicle.stockQuantity}</td>
-              <td>
-                <button 
-                  className="btn btn-danger btn-sm" 
-                  onClick={() => confirmDelete(vehicle)}
-                  style={{
-                    padding: '0.5rem 1rem',
-                    borderRadius: '6px',
-                    backgroundColor: '#e74c3c',
-                    border: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <FaTrash /> Supprimer
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* ✅ Fenêtre modale pour confirmation */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation de suppression</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Voulez-vous vraiment supprimer <strong>{vehicleToDelete?.name}</strong> ?</p>
+          Êtes-vous sûr de vouloir supprimer ce véhicule ?
+          {vehicleToDelete && (
+            <div className="delete-confirmation-details">
+              <p><strong>Nom:</strong> {vehicleToDelete.name}</p>
+              <p><strong>Prix:</strong> {vehicleToDelete.price} €</p>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Annuler</Button>
-          <Button variant="danger" onClick={deleteVehicle}><FaTrash /> Supprimer</Button>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Annuler
+          </Button>
+          <Button variant="danger" onClick={deleteVehicle}>
+            Supprimer
+          </Button>
         </Modal.Footer>
       </Modal>
-    </div>
-      </div>
+
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Modifier le véhicule</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {editingVehicle && (
+            <div className="edit-form">
+              <div className="form-group">
+                <label>Nom</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={editingVehicle.name}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Prix</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={editingVehicle.price}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Quantité en stock</label>
+                <input
+                  type="number"
+                  name="stockQuantity"
+                  value={editingVehicle.stockQuantity}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Année de fabrication</label>
+                <input
+                  type="number"
+                  name="yearOfManufacture"
+                  value={editingVehicle.yearOfManufacture}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Type de carburant</label>
+                <select
+                  name="fuelType"
+                  value={editingVehicle.fuelType}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                >
+                  <option value="essence">Essence</option>
+                  <option value="diesel">Diesel</option>
+                  <option value="electric">Électrique</option>
+                  <option value="hybrid">Hybride</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Kilométrage</label>
+                <input
+                  type="number"
+                  name="mileage"
+                  value={editingVehicle.mileage}
+                  onChange={handleEditInputChange}
+                  className="form-control"
+                />
+              </div>
+              {/* Display fields based on vehicle_type from the database */}
+              {editingVehicle.vehicle_type === "CAR" && (
+                <div className="form-group">
+                  <label>Nombre de portes</label>
+                  <input
+                    type="number"
+                    name="numberOfDoors"
+                    value={editingVehicle.numberOfDoors}
+                    onChange={handleEditInputChange}
+                    className="form-control"
+                  />
+                </div>
+              )}
+              {editingVehicle.vehicle_type === "SCOOTER" && (
+                <div className="form-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="hasStorageBox"
+                      checked={editingVehicle.hasStorageBox}
+                      onChange={handleEditInputChange}
+                    />
+                    Coffre de rangement
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Annuler
+          </Button>
+          <Button variant="primary" onClick={handleUpdate}>
+            Mettre à jour
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

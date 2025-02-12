@@ -1,146 +1,280 @@
 /* AdminCatalog.css */
 
 /* Conteneur principal */
-.admin-container {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 120px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Titre principal */
-  .admin-container h2 {
-    font-size: 36px;
-    color: #1a4e88;
-    margin-bottom: 20px;
-  }
-  
-  /* Boutons de navigation et de réduction */
-  .admin-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .admin-buttons button {
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .admin-buttons .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  .admin-buttons .btn-warning {
-    background-color: #f0ad4e;
-    color: white;
-  }
-  
-  /* Formulaire d'ajout de véhicule */
-  .add-vehicle-form {
-    margin-bottom: 40px;
-  }
-  
-  .add-vehicle-form h4 {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #1a4e88;
-  }
-  
-  .add-vehicle-form select,
-  .add-vehicle-form input {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .add-vehicle-form input:focus,
-  .add-vehicle-form select:focus {
-    outline: none;
-    border-color: #1a4e88;
-  }
-  
-  /* Bouton d'ajout de véhicule */
-  .add-vehicle-form button {
-    background-color: #28a745;
-    color: white;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-vehicle-form button:hover {
-    background-color: #218838;
-  }
-  
-  /* Tableau des véhicules */
-  .vehicle-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-  }
-  
-  .vehicle-table th,
-  .vehicle-table td {
-    padding: 12px;
-    text-align: left;
-  }
-  
-  .vehicle-table th {
-    background-color: #1a4e88;
-    color: white;
-    font-size: 16px;
-  }
-  
-  .vehicle-table td {
-    background-color: #f9f9f9;
-  }
-  
-  .vehicle-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  .vehicle-table button {
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 5px;
-  }
-  
-  /* Fenêtre modale */
-  .modal-content {
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  .modal-header {
-    background-color: #1a4e88;
-    color: white;
-    border-radius: 10px 10px 0 0;
-  }
-  
-  .modal-body {
-    background-color: #f9f9f9;
-  }
-  
-  .modal-footer {
-    background-color: #f9f9f9;
-    border-radius: 0 0 10px 10px;
-  }
-  
-  .modal-footer button {
-    border-radius: 25px;
-    font-weight: bold;
-  }
-  
-  .form-check-label {
-    font-size: 16px;
-  }
-  
+.admin-catalog-container {
+  padding: 5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+.admin-header {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.premium-button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  background: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.premium-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.premium-button.success {
+  background: #2ecc71;
+  color: white;
+}
+
+.admin-filters {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.search-bar {
+  flex: 1;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.filter-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.8rem;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  min-width: 150px;
+}
+
+.admin-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.add-vehicle-section,
+.vehicles-list-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.8rem;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.image-upload {
+  grid-column: span 2;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.vehicles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.vehicle-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-image {
+  height: 200px;
+  background: #f8f9fa;
+  position: relative;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  gap: 0.5rem;
+}
+
+.vehicle-info {
+  padding: 1.5rem;
+}
+
+.vehicle-info h3 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.vehicle-actions {
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-button.edit {
+  background: #3498db;
+  color: white;
+}
+
+.icon-button.delete {
+  background: #e74c3c;
+  color: white;
+}
+
+.icon-button:hover {
+  transform: scale(1.1);
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.delete-confirmation-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
