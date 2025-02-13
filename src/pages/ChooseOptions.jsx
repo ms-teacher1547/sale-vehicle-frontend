@@ -272,7 +272,7 @@ const ChooseOptions = () => {
                         color: 'var(--primary-main)',
                         fontWeight: 'bold'
                       }}>
-                        {vehicle.price.toLocaleString()} €
+                        {vehicle.price.toLocaleString()} FCFA
                       </div>
                       <button
                         style={{
@@ -363,7 +363,7 @@ const ChooseOptions = () => {
                           color: 'var(--primary-main)',
                           fontWeight: 'bold'
                         }}>
-                          {option.price.toLocaleString()} €
+                          {option.price.toLocaleString()} FCFA
                         </div>
                         <div style={{
                           width: '24px',
@@ -485,7 +485,7 @@ const ChooseOptions = () => {
                         color: 'var(--primary-main)',
                         fontWeight: 'bold'
                       }}>
-                        {((selectedVehicle.price + selectedOptions.reduce((sum, opt) => sum + opt.price, 0)) * quantity).toLocaleString()} €
+                        {((selectedVehicle.price + selectedOptions.reduce((sum, opt) => sum + opt.price, 0)) * quantity).toLocaleString()} FCFA
                       </div>
                     </div>
                     <button

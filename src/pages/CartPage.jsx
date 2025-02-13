@@ -429,7 +429,7 @@ const CartPage = () => {
                   fontSize: '1.5rem',
                   color: 'var(--primary-main)',
                   fontWeight: 'bold'
-                }}>{totalPrice.toLocaleString()} €</span>
+                }}>{totalPrice.toLocaleString()} FCFA</span>
               </div>
 
               <button
