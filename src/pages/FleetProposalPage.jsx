@@ -42,6 +42,7 @@ const FleetProposalPage = () => {
     const [selectedProposal, setSelectedProposal] = useState(null);
     const [vehicleDetails, setVehicleDetails] = useState([]);
     const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+    const [status, setStatus] = useState('');
 
     useEffect(() => {
         const fetchProposals = async () => {
@@ -63,6 +64,8 @@ const FleetProposalPage = () => {
         };
         fetchProposals();
     }, [user]);
+
+    
 
     const handleClose = () => {
         setSnackbar({ ...snackbar, open: false });
@@ -92,12 +95,24 @@ const FleetProposalPage = () => {
     const handleDetailsClose = () => {
         setDetailsDialogOpen(false);
     };
+    const handleSelectProposal = (proposal) => {
+        setSelectedProposal(proposal);
+        console.log('Selected Proposal:', proposal);
+    };
 
-    const changeStatus = async (id) => {
+    const changeStatus = async (id, newStatus) => {
         try {
-            await axios.put(`${API_FLEET_PROPOSAL_URL}/${id}/status`, null, { params: { newStatus: 'REJETE' }, withCredentials: true });
-            setSnackbar({ open: true, message: `Proposition rejetée avec succès`, severity: 'success' });
+            // Effectuer l'appel PUT avec le bon statut
+            const response = await axios.put(`${API_FLEET_PROPOSAL_URL}/${id}/status`, null, { params: { newStatus }, withCredentials: true });
+            console.log('Statut mis à jour:', response.data);
+            setSelectedProposal(prev => ({
+                ...prev,
+                proposalStatus: newStatus // Mettez à jour le statut ici
+            }));
+    
+            setSnackbar({ open: true, message: `Proposition ${newStatus} avec succès`, severity: 'success' });
         } catch (error) {
+            console.error('Erreur lors de la mise à jour du statut:', error.response ? error.response.data : error.message);
             setSnackbar({ open: true, message: "Impossible de mettre à jour le statut", severity: 'error' });
         }
     };
@@ -120,7 +135,6 @@ const FleetProposalPage = () => {
             setSnackbar({ open: true, message: "Erreur lors de l'ajout au panier", severity: 'error' });
         }
     };
-
     return (
         <Box sx={{ 
             backgroundColor: 'var(--background)',
@@ -266,9 +280,15 @@ const FleetProposalPage = () => {
                                             {proposal.totalPrice.toLocaleString()} FCFA
 
                                         </Typography>
-                                        <Typography variant="body1" sx={{ color: 'black', mb: 2 }}>
-                                            Statut : {proposal.status}
-                                        </Typography>
+                                        {selectedProposal ? (
+                                            <Typography variant="body1" sx={{ color: 'black', mb: 2 }}>
+                                                Statut : {selectedProposal.proposalStatus}
+                                            </Typography>
+                                        ) : (
+                                            <Typography variant="body1" sx={{ color: 'black', mb: 2 }}>
+                                                Statut : {proposal.proposalStatus}
+                                            </Typography>
+                                        )}
                                     </Box>
                                     
                                     <Box sx={{ 
@@ -444,7 +464,22 @@ const FleetProposalPage = () => {
                     }}
                 >
                     <MenuItem 
-                        onClick={() => changeStatus(selectedProposal?.id)} 
+    onClick={() => changeStatus(selectedProposal?.id, 'REJETE')} 
+    sx={{ 
+        py: 1.5,
+        '&:hover': {
+            backgroundColor: 'var(--error-light)'
+        }
+    }}
+>
+    <CancelIcon sx={{ mr: 2, color: 'var(--error)' }} />
+    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+        Rejeter
+    </Typography>
+                    </MenuItem>
+
+                    <MenuItem 
+                        onClick={() => changeStatus(selectedProposal?.id, 'ACCEPTE')} 
                         sx={{ 
                             py: 1.5,
                             '&:hover': {
@@ -455,20 +490,6 @@ const FleetProposalPage = () => {
                         <CheckIcon sx={{ mr: 2, color: 'var(--success)' }} />
                         <Typography variant="body2" sx={{ fontWeight: 500 }}>
                             Accepter
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => changeStatus(selectedProposal?.id)} 
-                        sx={{ 
-                            py: 1.5,
-                            '&:hover': {
-                                backgroundColor: 'var(--error-light)'
-                            }
-                        }}
-                    >
-                        <CancelIcon sx={{ mr: 2, color: 'var(--error)' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            Rejeter
                         </Typography>
                     </MenuItem>
                 </Menu>
