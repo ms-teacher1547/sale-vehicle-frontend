@@ -96,7 +96,7 @@ const HomePage = () => {
             margin: '0 auto 2rem'
           }}
         >
-          Achetez et vendez des véhicules en toute simplicité !
+          Achetez des véhicules en toute simplicité !
         </motion.p>
 
         {user ? (
