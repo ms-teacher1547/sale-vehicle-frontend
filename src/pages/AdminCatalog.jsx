@@ -328,9 +328,7 @@ const AdminCatalog = () => {
           >
             <option value="all">Tous les carburants</option>
             <option value="essence">Essence</option>
-            <option value="diesel">Diesel</option>
             <option value="electric">Électrique</option>
-            <option value="hybrid">Hybride</option>
           </select>
           <input
             type="number"
@@ -402,9 +400,7 @@ const AdminCatalog = () => {
               <label>Type de carburant</label>
               <select name="fuelType" value={newVehicle.fuelType} onChange={handleInputChange}>
                 <option value="essence">Essence</option>
-                <option value="diesel">Diesel</option>
                 <option value="electric">Électrique</option>
-                <option value="hybrid">Hybride</option>
               </select>
             </div>
             <div className="form-group">
@@ -474,19 +470,12 @@ const AdminCatalog = () => {
               {getFilteredAndSortedVehicles().map((vehicle) => (
                 <div key={vehicle.id} className="vehicle-card">
                   <div className="vehicle-image">
-                    {vehicle.imageUrl ? (
-                      <img src={vehicle.imageUrl} alt={vehicle.name} />
-                    ) : (
-                      <div className="no-image">
-                        <FaCar />
-                        <span>Pas d'image</span>
-                      </div>
-                    )}
+                    <img src={vehicle.imageUrl ? `http://localhost:8081/uploads/vehicles/${vehicle.imageUrl.split('/').pop()}` : imagePreview} alt='Vehicle Image' />
                   </div>
                   <div className="vehicle-info">
                     <h3>{vehicle.name}</h3>
                     <div className="info-grid">
-                      <span>Prix: {vehicle.price} €</span>
+                      <span>Prix: {vehicle.price} FCFA</span>
                       <span>Stock: {vehicle.stockQuantity}</span>
                       <span>Année: {vehicle.yearOfManufacture}</span>
                       <span>Carburant: {vehicle.fuelType}</span>
@@ -516,7 +505,7 @@ const AdminCatalog = () => {
           {vehicleToDelete && (
             <div className="delete-confirmation-details">
               <p><strong>Nom:</strong> {vehicleToDelete.name}</p>
-              <p><strong>Prix:</strong> {vehicleToDelete.price} €</p>
+              <p><strong>Prix:</strong> {vehicleToDelete.price} FCFA</p>
             </div>
           )}
         </Modal.Body>
@@ -586,9 +575,7 @@ const AdminCatalog = () => {
                   className="form-control"
                 >
                   <option value="essence">Essence</option>
-                  <option value="diesel">Diesel</option>
                   <option value="electric">Électrique</option>
-                  <option value="hybrid">Hybride</option>
                 </select>
               </div>
               <div className="form-group">
